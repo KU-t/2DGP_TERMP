@@ -370,7 +370,7 @@ def draw():
         student.draw()
     for resident in residents:
         resident.draw()
-    #shoe.draw()
+    shoe.draw()
     update_canvas()
 
 

@@ -4,11 +4,12 @@ import os
 
 from pico2d import *
 import game_framework
-
+import main_state
 
 name = "PauseState"
 
 image = None
+frame = 0
 
 
 def enter():
@@ -37,13 +38,20 @@ def handle_events():
 
 
 def update():
-   pass
+    global frame
+    frame = (frame + 1) % 200
 
 
 def draw():
-    global image
-    clear_canvas()
-    image.draw(400, 300)
+    global image, frame
+    if frame//100 == 0:
+        clear_canvas()
+        main_state.draw()
+
+    if frame//100 == 1:
+        image.draw(400, 300)
+
+
     update_canvas()
 
 
