@@ -17,6 +17,7 @@ life = None
 
 penguin = None
 shoe = None
+human = None
 
 class Tip:
     def __init__(self):
@@ -80,6 +81,29 @@ class Penguin:
             self.image.clip_draw(self.move_frame * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y)
 
 
+class Human:
+    image = None
+
+    def __init__(self, x, y, human_type):
+        self.x = x
+        self.y = y
+        self.human_type = human_type
+        self.state = 'sleep'
+        self.frame = 0
+        self.direct = 0
+
+        if Human.image == None:
+            Human.image = load_image('huddle.png')
+
+    def draw(self):
+        if self.human_type == 'red_student':
+            Human.image.clip_draw(self.frame * 32 + 32 * 3, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
+        elif self.human_type == 'green_student':
+            Human.image.clip_draw(self.frame * 32, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
+        elif self.human_type == 'blue_student':
+            Human.image.clip_draw(self.frame * 32 + 32 * 3, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
+        elif self.human_type == 'resident':
+            Human.image.clip_draw(self.frame * 32, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
 
 class Boy:
     def __init__(self):
@@ -101,12 +125,13 @@ class Boy:
 
 
 def enter():
-    global boy, tip, life, penguin, shoe
+    global boy, tip, life, penguin, shoe, human
     #boy = Boy()
     tip = Tip()
     life = Life()
     penguin = Penguin()
     shoe = Shoe()
+    human = Human(200, 200, 'red_student')
 
 
 def exit():
@@ -124,6 +149,7 @@ def resume():
 
 
 def handle_events():
+    global penguin
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -133,6 +159,23 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.push_state(pause_state)
 
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+            penguin.direction[0] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+            penguin.direction[1] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
+            penguin.direction[2] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+            penguin.direction[3] = True
+
+        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
+            penguin.direction[0] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
+            penguin.direction[1] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
+            penguin.direction[2] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
+            penguin.direction[3] = False
 
 def update():
     #boy.update()
@@ -144,6 +187,7 @@ def draw():
     tip.draw()
     life.draw()
     penguin.draw()
+    human.draw()
     #shoe.draw()
     update_canvas()
 
