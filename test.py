@@ -1,55 +1,36 @@
-import random
-import json
-import os
-
 from pico2d import *
+import random
 
-import game_framework
-import title_state
-import pause_state
-
-
-name = "MainState"
-
-font = None
-tip = None
-life = None
-
-penguin = None
-shoe = None
-students = None
-residents = None
-
-class Tip:
-    def __init__(self):
-        self.image = load_image('TIP.png')
-    def draw(self):
-        self.image.clip_draw(penguin.x - penguin.draw_x, penguin.y - penguin.draw_y, 800, 600, 400, 300)
+open_canvas()
+TIP = load_image('TIP.png')
+Life = load_image('life.jpg')
 
 
-class Life:
-    def __init__(self):
-        self.image = load_image('life.jpg')
-        self.life = 3
+def handle_events():
+    global penguin, running
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+            penguin.direction[0] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+            penguin.direction[1] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
+            penguin.direction[2] = True
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+            penguin.direction[3] = True
 
-    def draw(self):
-        for i in range(self.life):
-            self.image.clip_draw(0, 0, 512, 512, 770 - 50 * i, 570, 50, 50)
-
-
-class Shoe:
-    image = None
-
-    def __init__(self):
-        self.x, self.y = 400, 300
-        if self.image == None:
-            self.image = load_image('life.jpg')
-
-    def update(self):
-        pass
-
-    def draw(self):
-        self.image.clip_draw(0, 0, 512, 512, self.x, self.y, 50, 50)
+        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
+            penguin.direction[0] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
+            penguin.direction[1] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
+            penguin.direction[2] = False
+        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
+            penguin.direction[3] = False
 
 
 class Penguin:
@@ -81,6 +62,21 @@ class Penguin:
         else:
             self.image.clip_draw(self.move_frame * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y)
 
+        for i in range(self.life):
+            Life.clip_draw(0, 0, 512, 512, 770 - 50 * i, 570, 50, 50)
+
+
+class Shoes:
+
+    def __init__(self):
+        self.x, self.y = 800, 600
+
+    def update(self):
+        pass
+
+    def draw(self):
+        Life.clip_draw(0, 0, 512, 512, self.x, self.y, 50, 50)
+
 
 class Human:
     image = None
@@ -106,23 +102,45 @@ class Human:
         elif self.human_type == 'resident':
             Human.image.clip_draw(self.frame * 32, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
 
-class Boy:
-    def __init__(self):
-        self.x, self.y = 0, 90
-        self.frame = 0
-        self.image = load_image('run_animation.png')
-        self.dir = 1
 
-    def update(self):
-        self.frame = (self.frame + 1) % 8
-        self.x += self.dir
-        if self.x >= 800:
-            self.dir = -1
-        elif self.x <= 0:
-            self.dir = 1
+class Room:
 
-    def draw(self):
-        self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
+    def __init__(self, x, y, _type):
+        self.x = x
+        self.y = y
+        self.Left = x - 100
+        self.Right = x + 100
+        self.Bottom = y - 75
+        self.Top = y + 75
+        self.state = 'off'
+        self.type = _type
+
+    def check_penguin_collision_out(self):
+        if penguin.y + penguin.move_speed >= self.Top and penguin.direction[0]:
+            penguin.direction[0] = False
+        if penguin.x - penguin.move_speed <= self.Left and penguin.direction[1]:
+            penguin.direction[1] = False
+        if penguin.y - penguin.move_speed <= (self.Bottom + 10) and penguin.direction[2]:
+            penguin.direction[2] = False
+        if penguin.x + penguin.move_speed >= self.Right and penguin.direction[3]:
+            penguin.direction[3] = False
+
+    def check_penguin_collision_in(self):
+
+        if self.Left <= penguin.x and penguin.x <= self.Right:
+            if penguin.y + penguin.move_speed == (self.Bottom + 10) and penguin.direction[0]:
+                penguin.direction[0] = False
+            if penguin.y - penguin.move_speed == (self.Top + 10) and penguin.direction[2]:
+                penguin.direction[2] = False
+
+        if (self.Bottom + 10) <= penguin.y and penguin.y <= (self.Top + 10):
+            if penguin.x - penguin.move_speed == self.Right and penguin.direction[1]:
+                penguin.direction[1] = False
+            if penguin.x + penguin.move_speed == self.Left and penguin.direction[3]:
+                penguin.direction[3] = False
+
+    def check_human_collision(self):
+        pass
 
 
 def move_obj():
@@ -186,6 +204,14 @@ def update_obj():
         if resident.frame == 0:
             resident.direct = random.randrange(0, 4)
 
+    for room in rooms:
+        room.check_penguin_collision_in()
+
+    for room in rooms:
+        if room.Left < penguin.x and penguin.x < room.Right and room.Bottom < penguin.y and penguin.y < room.Top:
+            room.check_penguin_collision_out()
+            break
+
     move_obj()
 
 
@@ -194,7 +220,7 @@ def count_x_increase():
     if penguin.x >= 1200:
         if penguin.x < 1590:
             penguin.draw_x += penguin.move_speed
-            shoe.x += penguin.move_speed
+            shoes.x += penguin.move_speed
             for student in students:
                 student.x += penguin.move_speed
             for resident in residents:
@@ -203,7 +229,7 @@ def count_x_increase():
     elif penguin.x < 400:
         if penguin.x >= 10:
             penguin.draw_x += penguin.move_speed
-            shoe.x += penguin.move_speed
+            shoes.x += penguin.move_speed
             for student in students:
                 student.x += penguin.move_speed
             for resident in residents:
@@ -211,7 +237,7 @@ def count_x_increase():
 
     if penguin.x < 1590:
         penguin.x += penguin.move_speed
-        shoe.x -= penguin.move_speed
+        shoes.x -= penguin.move_speed
         for student in students:
             student.x -= penguin.move_speed
         for resident in residents:
@@ -221,7 +247,7 @@ def count_y_increase():
     if penguin.y >= 900:
         if penguin.y < 1180:
             penguin.draw_y += penguin.move_speed
-            shoe.y += penguin.move_speed
+            shoes.y += penguin.move_speed
             for student in students:
                 student.y += penguin.move_speed
             for resident in residents:
@@ -230,7 +256,7 @@ def count_y_increase():
     elif penguin.y >= 20:
         if penguin.y < 300:
             penguin.draw_y += penguin.move_speed
-            shoe.y += penguin.move_speed
+            shoes.y += penguin.move_speed
             for student in students:
                 student.y += penguin.move_speed
             for resident in residents:
@@ -238,7 +264,7 @@ def count_y_increase():
 
     if penguin.y < 1180:
         penguin.y += penguin.move_speed
-        shoe.y -= penguin.move_speed
+        shoes.y -= penguin.move_speed
         for student in students:
             student.y -= penguin.move_speed
         for resident in residents:
@@ -249,7 +275,7 @@ def count_x_decrease():
     if penguin.x <= 400:
         if penguin.x > 10:
             penguin.draw_x -= penguin.move_speed
-            shoe.x -= penguin.move_speed
+            shoes.x -= penguin.move_speed
             for student in students:
                 student.x -= penguin.move_speed
             for resident in residents:
@@ -258,7 +284,7 @@ def count_x_decrease():
     elif penguin.x > 1200:
         if penguin.x <= 1590:
             penguin.draw_x -= penguin.move_speed
-            shoe.x -= penguin.move_speed
+            shoes.x -= penguin.move_speed
             for student in students:
                 student.x -= penguin.move_speed
             for resident in residents:
@@ -266,7 +292,7 @@ def count_x_decrease():
 
     if penguin.x > 10:
         penguin.x -= penguin.move_speed
-        shoe.x += penguin.move_speed
+        shoes.x += penguin.move_speed
         for student in students:
             student.x += penguin.move_speed
         for resident in residents:
@@ -276,7 +302,7 @@ def count_y_decrease():
     if penguin.y > 900:
         if penguin.y <= 1180:
             penguin.draw_y -= penguin.move_speed
-            shoe.y -= penguin.move_speed
+            shoes.y -= penguin.move_speed
             for student in students:
                 student.y -= penguin.move_speed
             for resident in residents:
@@ -285,7 +311,7 @@ def count_y_decrease():
     elif penguin.y > 20:
         if penguin.y <= 300:
             penguin.draw_y -= penguin.move_speed
-            shoe.y -= penguin.move_speed
+            shoes.y -= penguin.move_speed
             for student in students:
                 student.y -= penguin.move_speed
             for resident in residents:
@@ -293,87 +319,43 @@ def count_y_decrease():
 
     if penguin.y > 20:
         penguin.y -= penguin.move_speed
-        shoe.y += penguin.move_speed
+        shoes.y += penguin.move_speed
         for student in students:
             student.y += penguin.move_speed
         for resident in residents:
             resident.y += penguin.move_speed
 
 
-def enter():
-    global boy, tip, life, penguin, shoe, students, residents
-    #boy = Boy()
-    tip = Tip()
-    life = Life()
-    penguin = Penguin()
-    shoe = Shoe()
-    students = [Human(200, 200, 'red_student'), Human(300, 300, 'red_student')]
-    residents = [Human(250, 200, 'green_student'), Human(350, 300, 'green_student')]
+shoes = Shoes()
+penguin = Penguin()
 
-def exit():
-    pass
+students = [Human(40, 300, 'red_student'), Human(80, 300, 'green_student'), Human(120, 300, 'blue_student')]
 
+residents = [Human(300, 200, 'resident')]
 
-def pause():
-    pass
+rooms = [Room(200 * 1 + 100, 150 * 1 + 75, 0)]
+
+running = True
+Object = [shoes, penguin]
 
 
-def resume():
-    pass
-
-
-def handle_events():
-    global penguin
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.change_state(title_state)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
-            game_framework.push_state(pause_state)
-
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            penguin.direction[0] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            penguin.direction[1] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-            penguin.direction[2] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            penguin.direction[3] = True
-
-        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
-            penguin.direction[0] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
-            penguin.direction[1] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
-            penguin.direction[2] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
-            penguin.direction[3] = False
-
-
-
-
-
-
-
-def update():
+while running:
+    handle_events()
     update_obj()
 
-
-def draw():
     clear_canvas()
-    tip.draw()
-    life.draw()
+    TIP.clip_draw(penguin.x - penguin.draw_x, penguin.y - penguin.draw_y, 800, 600, 400, 300)
+    shoes.draw()
     penguin.draw()
+
     for student in students:
         student.draw()
+
     for resident in residents:
         resident.draw()
-    #shoe.draw()
+
     update_canvas()
 
+    delay(0.1)
 
-
-
-
+close_canvas()
