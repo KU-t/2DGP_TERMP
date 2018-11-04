@@ -26,7 +26,7 @@ class Human:
         self.state = 'sleep'
         self.frame = 0
         self.direct = dir
-
+        self.change_dir = random.randint(0, 999)
         if Human.image == None:
             Human.image = load_image('huddle.png')
 
@@ -45,11 +45,22 @@ class Human:
         pass
 
     def update(self):
-        pass
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.change_dir += 1
+        if self.change_dir >= 300:
+            self.change_dir = 0
+            self.direct = random.randint(0, 3)
+
+        if self.direct == 1:
+            self.x += 0.1
+        if self.direct == 2:
+            self.x -= 0.1
+        if self.direct == 0:
+            self.y += 0.1
+        if self.direct == 3:
+            self.y -= 0.1
 
     def draw(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-
         if self.human_type == 'red_student':
             Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
         elif self.human_type == 'green_student':
@@ -63,3 +74,6 @@ class Human:
     def handle_event(self, event):
        pass
 
+    def check_move(self):
+        if self.direct == 1:
+            pass

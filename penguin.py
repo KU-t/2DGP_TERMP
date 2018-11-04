@@ -23,9 +23,10 @@ class Penguin:
         self.draw_x, self.draw_y = 400, 300
         self.image = load_image('penguin.png')
         self.direction = [False, False, False, False]
-        self.move_speed = 10
-        self.life = 3
+        self.move_speed = 5
+        self.time_life = 0
         self.state = 'move'
+        self.item = 0
         #self.x, self.y = 1600 // 2, 90
         # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF', 16)
@@ -56,6 +57,9 @@ class Penguin:
         self.velocity_y = 0
         self.velocity_draw_x = 0
         self.velocity_draw_y = 0
+        if self.time_life > 0:
+            self.time_life -= 1
+
 
     def draw(self):
 
@@ -72,7 +76,9 @@ class Penguin:
         else:
             self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y)
 
-        self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (255, 255, 0))
+        self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (0, 0, 0))
+        self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
+        self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
         #fill here
         draw_rectangle(*self.get_bb())
 

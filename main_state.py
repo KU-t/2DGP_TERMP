@@ -16,10 +16,10 @@ from shoe import Shoe
 name = "MainState"
 
 penguin = None
-students = None
+students = []
 tip = None
 life = None
-shoes = None
+shoes = []
 #balls = []
 #big_balls = []
 
@@ -109,11 +109,26 @@ def handle_events():
             penguin.direction[3] = False
 
 def update():
+
     for game_object in game_world.all_objects():
         game_object.update()
     update_obj()
 
     # fill here for collision check
+    for student in students:
+        if collide(penguin, student):
+            if penguin.time_life == 0:
+                penguin.time_life = 300
+                life.life -= 1
+
+    for shoe in shoes:
+        if collide(penguin, shoe):
+            penguin.item += 1
+            #오류 잡자@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2 삭제가 안된다
+            shoe.exist = False
+            shoes.remove(shoe)
+            game_world.remove_object(shoes)
+
     #for ball in balls:
     #    if collide(boy, ball):
     #        balls.remove(ball)
