@@ -1,4 +1,5 @@
 import game_framework
+import random
 from pico2d import *
 
 
@@ -19,12 +20,12 @@ FRAMES_PER_ACTION = 3
 
 class Human:
     image = None
-    def __init__(self, x = 400, y = 400, human_type = 'red_student'):
+    def __init__(self, x = 400, y = 400, dir = random.randint(0,4), human_type = 'red_student'):
         self.x, self.y = x, y
         self.human_type = human_type
         self.state = 'sleep'
         self.frame = 0
-        self.direct = 0
+        self.direct = dir
 
         if Human.image == None:
             Human.image = load_image('huddle.png')
@@ -33,7 +34,7 @@ class Human:
 
     def get_bb(self):
         # fill here
-        return self.x - 16, self.y - 20, self.x + 16, self.y + 16
+        return self.x - 14, self.y - 25, self.x + 20, self.y + 25
 
 
     def fire_ball(self):

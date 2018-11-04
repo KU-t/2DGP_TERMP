@@ -39,14 +39,15 @@ def collide(a, b):
 
 
 def enter():
+
+    global students
+    students = [Human(i * 100, i * 50, random.randint(0, 4)) for i in range(10)]
+    for student in students:
+        game_world.add_object(student, 1)
+
     global penguin
     penguin = Penguin()
     game_world.add_object(penguin, 1)
-
-    global students
-    students = [Human(i*100, i*50) for i in range(10)]
-    for student in students:
-        game_world.add_object(student, 1)
 
     global tip
     tip = Tip()
@@ -54,12 +55,12 @@ def enter():
 
     global life
     life = Life()
-    game_world.add_object(life, 0)
+    game_world.add_object(life, 1)
 
     global shoes
     shoes = [Shoe(i * 50, i * 100) for i in range(10)]
     for shoe in shoes:
-        game_world.add_object(shoe, 1)
+        game_world.add_object(shoe, 0)
 
     # fill here for balls
     #global balls

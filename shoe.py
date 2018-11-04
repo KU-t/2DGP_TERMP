@@ -20,7 +20,7 @@ class Shoe:
 
     def get_bb(self):
         # fill here
-        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+        return self.x - 17, self.y - 16, self.x + 16, self.y + 14
 
     #def draw(self):
     #    self.image.draw(self.x, self.y)

@@ -29,13 +29,14 @@ class Penguin:
         #self.x, self.y = 1600 // 2, 90
         # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF', 16)
-        self.velocity = 0
+        self.velocity_x, self.velocity_y = 0, 0
+        self.velocity_draw_x, self.velocity_draw_y = 0, 0
 
 
 
     def get_bb(self):
         # fill here
-        return self.draw_x - 16, self.draw_y - 20, self.draw_x + 16, self.draw_y + 16
+        return self.draw_x - 12, self.draw_y - 20, self.draw_x + 12, self.draw_y + 16
 
 
     def fire_ball(self):
@@ -46,10 +47,18 @@ class Penguin:
         pass
 
     def update(self):
-        pass
+        self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.x += int(self.velocity_x * game_framework.frame_time)
+        self.y += int(self.velocity_y * game_framework.frame_time)
+        self.draw_x += int(self.velocity_draw_x * game_framework.frame_time)
+        self.draw_y += int(self.velocity_draw_y * game_framework.frame_time)
+        self.velocity_x = 0
+        self.velocity_y = 0
+        self.velocity_draw_x = 0
+        self.velocity_draw_y = 0
 
     def draw(self):
-        self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+
         if self.direct_frame == 0:
             self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y - 2)
         elif self.direct_frame == 4:
