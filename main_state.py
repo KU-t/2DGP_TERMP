@@ -11,6 +11,7 @@ from human import Human
 #from grass import Grass
 from tip import Tip
 from life import Life
+from shoe import Shoe
 
 name = "MainState"
 
@@ -18,7 +19,7 @@ penguin = None
 students = None
 tip = None
 life = None
-
+shoes = None
 #balls = []
 #big_balls = []
 
@@ -54,6 +55,11 @@ def enter():
     global life
     life = Life()
     game_world.add_object(life, 0)
+
+    global shoes
+    shoes = [Shoe(i * 50, i * 100) for i in range(10)]
+    for shoe in shoes:
+        game_world.add_object(shoe, 1)
 
     # fill here for balls
     #global balls
@@ -197,7 +203,8 @@ def count_x_increase():
     if penguin.x >= 1200:
         if penguin.x < 1590:
             penguin.draw_x += penguin.move_speed
-            #shoe.x += penguin.move_speed
+            for shoe in shoes:
+                shoe.x += penguin.move_speed
             for student in students:
                 student.x += penguin.move_speed
             #for resident in residents:
@@ -208,7 +215,8 @@ def count_x_increase():
     elif penguin.x < 400:
         if penguin.x >= 10:
             penguin.draw_x += penguin.move_speed
-            #shoe.x += penguin.move_speed
+            for shoe in shoes:
+                shoe.x += penguin.move_speed
             for student in students:
                 student.x += penguin.move_speed
             #for resident in residents:
@@ -218,7 +226,8 @@ def count_x_increase():
 
     if penguin.x < 1590:
         penguin.x += penguin.move_speed
-        #shoe.x -= penguin.move_speed
+        for shoe in shoes:
+            shoe.x -= penguin.move_speed
         for student in students:
             student.x -= penguin.move_speed
         #for resident in residents:
@@ -231,7 +240,8 @@ def count_y_increase():
     if penguin.y >= 900:
         if penguin.y < 1180:
             penguin.draw_y += penguin.move_speed
-            #shoe.y += penguin.move_speed
+            for shoe in shoes:
+                shoe.y += penguin.move_speed
             for student in students:
                 student.y += penguin.move_speed
             #for resident in residents:
@@ -243,7 +253,8 @@ def count_y_increase():
 
         if penguin.y < 300:
             penguin.draw_y += penguin.move_speed
-            #shoe.y += penguin.move_speed
+            for shoe in shoes:
+                shoe.y += penguin.move_speed
             for student in students:
                 student.y += penguin.move_speed
             #for resident in residents:
@@ -253,7 +264,8 @@ def count_y_increase():
 
     if penguin.y < 1180:
         penguin.y += penguin.move_speed
-        #shoe.y -= penguin.move_speed
+        for shoe in shoes:
+            shoe.y -= penguin.move_speed
         for student in students:
             student.y -= penguin.move_speed
         #for resident in residents:
@@ -268,7 +280,8 @@ def count_x_decrease():
     if penguin.x <= 400:
         if penguin.x > 10:
             penguin.draw_x -= penguin.move_speed
-            #shoe.x -= penguin.move_speed
+            for shoe in shoes:
+                shoe.x -= penguin.move_speed
             for student in students:
                 student.x -= penguin.move_speed
             #for resident in residents:
@@ -280,7 +293,8 @@ def count_x_decrease():
 
         if penguin.x <= 1590:
             penguin.draw_x -= penguin.move_speed
-            #shoe.x -= penguin.move_speed
+            for shoe in shoes:
+                shoe.x -= penguin.move_speed
             for student in students:
                 student.x -= penguin.move_speed
             #for resident in residents:
@@ -290,7 +304,8 @@ def count_x_decrease():
 
     if penguin.x > 10:
         penguin.x -= penguin.move_speed
-        #shoe.x += penguin.move_speed
+        for shoe in shoes:
+            shoe.x += penguin.move_speed
         for student in students:
             student.x += penguin.move_speed
         #for resident in residents:
@@ -302,7 +317,8 @@ def count_y_decrease():
     if penguin.y > 900:
         if penguin.y <= 1180:
             penguin.draw_y -= penguin.move_speed
-        #    shoe.y -= penguin.move_speed
+            for shoe in shoes:
+                shoe.y -= penguin.move_speed
             for student in students:
                 student.y -= penguin.move_speed
         #    for resident in residents:
@@ -313,7 +329,8 @@ def count_y_decrease():
     elif penguin.y > 20:
         if penguin.y <= 300:
             penguin.draw_y -= penguin.move_speed
-        #    shoe.y -= penguin.move_speed
+            for shoe in shoes:
+                shoe.y -= penguin.move_speed
             for student in students:
                 student.y -= penguin.move_speed
         #    for resident in residents:
@@ -323,7 +340,8 @@ def count_y_decrease():
 
     if penguin.y > 20:
         penguin.y -= penguin.move_speed
-        #shoe.y += penguin.move_speed
+        for shoe in shoes:
+            shoe.y += penguin.move_speed
         for student in students:
             student.y += penguin.move_speed
         #for resident in residents:
