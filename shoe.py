@@ -20,7 +20,7 @@ class Shoe:
 
     def get_bb(self):
         # fill here
-        return self.x - 80, self.y - 60, self.x + 80, self.y + 60
+        return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
     #def draw(self):
     #    self.image.draw(self.x, self.y)
@@ -28,7 +28,7 @@ class Shoe:
     #    draw_rectangle(*self.get_bb())
     def draw(self):
         self.image.clip_draw(0, 0, 512, 512, self.x, self.y, 50, 50)
-
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         #self.y -= self.fall_speed * game_framework.frame_time

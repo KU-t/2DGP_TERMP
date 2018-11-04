@@ -1,12 +1,11 @@
 import game_framework
 from pico2d import *
 
-
 import game_world
 
 # Boy Run Speed
-PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+PIXEL_PER_METER = (10.0 / 1)  # 10 pixel 100 cm
+RUN_SPEED_KMPH = 18.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -50,7 +49,7 @@ class Penguin:
         pass
 
     def draw(self):
-        self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         if self.direct_frame == 0:
             self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y - 2)
         elif self.direct_frame == 4:
