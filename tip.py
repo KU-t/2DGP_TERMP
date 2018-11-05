@@ -24,7 +24,7 @@ class Tip:
     #    # fill here for draw
     #    draw_rectangle(*self.get_bb())
     def draw(self):
-        self.image.clip_draw(main_state.penguin.x - main_state.penguin.draw_x, main_state.penguin.y - main_state.penguin.draw_y, 800, 600, 400, 300)
+        self.image.clip_draw(main_state.penguin .x - main_state.penguin.draw_x, main_state.penguin.y - main_state.penguin.draw_y, 800, 600, 400, 300)
 
 
     def update(self):

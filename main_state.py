@@ -164,7 +164,6 @@ def move_obj():
             penguin.direct_frame = 3
 
 
-
     elif penguin.direction[1] == True:
         if penguin.direction[2] == True:
             count_x_decrease()
