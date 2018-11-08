@@ -23,7 +23,7 @@ class Penguin:
         self.draw_x, self.draw_y = 400, 300
         self.image = load_image('penguin.png')
         self.direction = [False, False, False, False]
-        self.move_speed = 5
+        self.move_speed = 300
         self.time_life = 0
         self.state = 'move'
         self.item = 0
@@ -42,7 +42,6 @@ class Penguin:
 
     def fire_ball(self):
         pass
-
 
     def add_event(self, event):
         pass
@@ -79,6 +78,7 @@ class Penguin:
         self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (0, 0, 0))
         self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
         self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
+        self.font.draw(self.draw_x - 200, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
         #fill here
         draw_rectangle(*self.get_bb())
 

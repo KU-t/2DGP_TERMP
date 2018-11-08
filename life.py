@@ -12,7 +12,7 @@ class Life:
     #    self.x, self.y, self.fall_speed = random.randint(0, 1600-1), 60, 0
     def __init__(self):
         self.image = load_image('life.jpg')
-        self.life = 15
+        self.life = 5
 
     def get_bb(self):
         # fill here

@@ -20,14 +20,17 @@ FRAMES_PER_ACTION = 3
 
 class Human:
     image = None
-    def __init__(self, x = 400, y = 400, dir = random.randint(0,4), human_type = 'red_student'):
+    move_speed = 300
+
+    def __init__(self, x = 400, y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
         self.x, self.y = x, y
+        self.velocity_x, self.velocity_y = 0, 0
         self.human_type = human_type
         self.state = 'sleep'
         self.frame = 0
         self.direct = dir
-        self.change_dir = random.randint(0, 999)
-        if Human.image == None:
+        self.count_change_dir = random.randint(0, 999)
+        if not Human.image:
             Human.image = load_image('huddle.png')
 
 
@@ -46,9 +49,14 @@ class Human:
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.change_dir += 1
-        if self.change_dir >= 300:
-            self.change_dir = 0
+        self.x += int(self.velocity_x * game_framework.frame_time)
+        self.y += int(self.velocity_y * game_framework.frame_time)
+        self.velocity_x = 0
+        self.velocity_y = 0
+
+        self.count_change_dir += 1
+        if self.count_change_dir >= 300:
+            self.count_change_dir = 0
             self.direct = random.randint(0, 3)
 
         if self.direct == 1:
