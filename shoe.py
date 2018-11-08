@@ -24,14 +24,16 @@ class Shoe:
     def __init__(self, x = 400, y = 300):
         self.x, self.y = x, y
         self.velocity_x, self.velocity_y = 0, 0
+        self.draw_x, self.draw_y = 0, 0
         self.exist = True
+        self.font = load_font('ENCR10B.TTF', 16)
         if Shoe.image == None:
             Shoe.image = load_image('life.jpg')
 
 
     def get_bb(self):
         # fill here
-        return self.x - 17, self.y - 16, self.x + 16, self.y + 14
+        return self.x - self.draw_x - 17, self.y - self.draw_y - 16, self.x  - self.draw_x + 16, self.y - self.draw_y + 14
 
     #def draw(self):
     #    self.image.draw(self.x, self.y)
@@ -39,13 +41,15 @@ class Shoe:
     #    draw_rectangle(*self.get_bb())
     def draw(self):
         if self.exist:
-            self.image.clip_draw(0, 0, 512, 512, self.x, self.y, 50, 50)
+            self.image.clip_draw(0, 0, 512, 512, self.x - self.draw_x, self.y - self.draw_y, 50, 50)
             draw_rectangle(*self.get_bb())
+            self.font.draw(self.x - self.draw_x, self.y - self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
+            self.font.draw(self.x - self.draw_x, self.y - self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
     def update(self):
         #self.y -= self.fall_speed * game_framework.frame_time
-        self.x += int(self.velocity_x * game_framework.frame_time)
-        self.y += int(self.velocity_y * game_framework.frame_time)
+        self.draw_x -= int(self.velocity_x * game_framework.frame_time)
+        self.draw_y -= int(self.velocity_y * game_framework.frame_time)
         self.velocity_x = 0
         self.velocity_y = 0
 

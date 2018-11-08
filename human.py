@@ -1,7 +1,7 @@
 import game_framework
 import random
 from pico2d import *
-
+import main_state
 
 import game_world
 
@@ -22,14 +22,17 @@ class Human:
     image = None
     move_speed = 300
 
-    def __init__(self, x = 400, y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
-        self.x, self.y = x, y
+    def __init__(self, draw_x = 400, draw_y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
+        self.x, self.y = draw_x, draw_y
+        self.draw_x, self.draw_y = draw_x, draw_y
         self.velocity_x, self.velocity_y = 0, 0
         self.human_type = human_type
         self.state = 'sleep'
         self.frame = 0
         self.direct = dir
         self.count_change_dir = random.randint(0, 999)
+        self.state = 'move'
+        self.font = load_font('ENCR10B.TTF', 16)
         if not Human.image:
             Human.image = load_image('huddle.png')
 
@@ -37,7 +40,7 @@ class Human:
 
     def get_bb(self):
         # fill here
-        return self.x - 14, self.y - 25, self.x + 20, self.y + 25
+        return self.draw_x - 14, self.draw_y - 25, self.draw_x + 20, self.draw_y + 25
 
 
     def fire_ball(self):
@@ -48,21 +51,30 @@ class Human:
         pass
 
     def update(self):
-        self.count_change_dir += 1
-        if self.count_change_dir >= 300:
-            self.count_change_dir = 0
-            self.direct = random.randint(0, 3)
-
-        if self.direct == 1:
-            self.velocity_x += 150
-        if self.direct == 2:
-            self.velocity_x -= 150
-        if self.direct == 0:
-            self.velocity_y += 150
-        if self.direct == 3:
-            self.velocity_y -= 150
-
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+
+        if self.state == 'move':
+            self.count_change_dir += 1
+            if self.count_change_dir >= 300:
+                self.count_change_dir = 0
+                self.direct = random.randint(0, 3)
+
+            if self.direct == 1:
+                self.velocity_x += 0
+            if self.direct == 2:
+                self.velocity_x -= 0
+            if self.direct == 0:
+                self.velocity_y += 0
+            if self.direct == 3:
+                self.velocity_y -= 0
+
+        if self.state == 'follow':
+            self.draw_x -= (self.x - (main_state.penguin.x )) / 100
+            self.draw_y -= (self.y - (main_state.penguin.y )) / 100
+
+
+        self.draw_x += int(self.velocity_x * game_framework.frame_time)
+        self.draw_y += int(self.velocity_y * game_framework.frame_time)
         self.x += int(self.velocity_x * game_framework.frame_time)
         self.y += int(self.velocity_y * game_framework.frame_time)
         self.velocity_x = 0
@@ -70,14 +82,17 @@ class Human:
 
     def draw(self):
         if self.human_type == 'red_student':
-            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct, 32, 32, self.draw_x, self.draw_y, 48, 48)
         elif self.human_type == 'green_student':
-            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct, 32, 32, self.draw_x, self.draw_y, 48, 48)
         elif self.human_type == 'blue_student':
-            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
         elif self.human_type == 'resident':
-            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
+
         draw_rectangle(*self.get_bb())
+        self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
+        self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
     def handle_event(self, event):
        pass
