@@ -23,9 +23,10 @@ class Human:
     move_speed = 300
 
     def __init__(self, draw_x = 400, draw_y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
-        self.x, self.y = draw_x, draw_y
+        self.x, self.y = draw_x, draw_y + 300
         self.draw_x, self.draw_y = draw_x, draw_y
         self.velocity_x, self.velocity_y = 0, 0
+        self.velocity_draw_x, self.velocity_draw_y = 0, 0
         self.human_type = human_type
         self.state = 'sleep'
         self.frame = 0
@@ -60,23 +61,34 @@ class Human:
                 self.direct = random.randint(0, 3)
 
             if self.direct == 1:
-                self.velocity_x += 0
+                self.velocity_draw_x += 100
+                self.velocity_x += 100
+
             if self.direct == 2:
-                self.velocity_x -= 0
+                self.velocity_draw_x -= 100
+                self.velocity_x -= 100
+
             if self.direct == 0:
-                self.velocity_y += 0
+                self.velocity_draw_y += 100
+                self.velocity_y += 100
+
             if self.direct == 3:
-                self.velocity_y -= 0
+                self.velocity_draw_y -= 100
+                self.velocity_y -= 100
 
         if self.state == 'follow':
-            self.draw_x -= (self.x - (main_state.penguin.x )) / 100
-            self.draw_y -= (self.y - (main_state.penguin.y )) / 100
+            self.velocity_draw_x -= (self.x - main_state.penguin.x)
+            self.velocity_draw_y -= (self.y - main_state.penguin.y)
+            self.velocity_x -= (self.x - main_state.penguin.x)
+            self.velocity_y -= (self.y - main_state.penguin.y)
 
 
-        self.draw_x += int(self.velocity_x * game_framework.frame_time)
-        self.draw_y += int(self.velocity_y * game_framework.frame_time)
+        self.draw_x += int(self.velocity_draw_x * game_framework.frame_time)
+        self.draw_y += int(self.velocity_draw_y * game_framework.frame_time)
         self.x += int(self.velocity_x * game_framework.frame_time)
         self.y += int(self.velocity_y * game_framework.frame_time)
+        self.velocity_draw_x = 0
+        self.velocity_draw_y = 0
         self.velocity_x = 0
         self.velocity_y = 0
 

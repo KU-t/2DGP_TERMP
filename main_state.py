@@ -120,6 +120,10 @@ def update():
             if penguin.time_life == 0:
                 penguin.time_life = 300
                 life.life -= 1
+        if (penguin.x - student.x)**2 + (penguin.y - student.y)**2 <= 10000:
+            student.state = 'follow'
+        else:
+            student.state = 'move'
 
     for shoe in shoes:
         if collide(penguin, shoe):
@@ -222,7 +226,7 @@ def count_x_increase():
             for shoe in shoes:
                 shoe.velocity_x += shoe.move_speed
             for student in students:
-                student.velocity_x += student.move_speed
+                student.velocity_draw_x += student.move_speed
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
@@ -234,7 +238,7 @@ def count_x_increase():
             for shoe in shoes:
                 shoe.velocity_x += shoe.move_speed
             for student in students:
-                student.velocity_x += student.move_speed
+                student.velocity_draw_x += student.move_speed
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
@@ -245,7 +249,7 @@ def count_x_increase():
         for shoe in shoes:
             shoe.velocity_x -= shoe.move_speed
         for student in students:
-            student.velocity_x -= student.move_speed
+            student.velocity_draw_x -= student.move_speed
         #for resident in residents:
         #    resident.x -= penguin.move_speed
 
@@ -259,7 +263,7 @@ def count_y_increase():
             for shoe in shoes:
                 shoe.velocity_y += shoe.move_speed
             for student in students:
-                student.velocity_y += student.move_speed
+                student.velocity_draw_y += student.move_speed
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
@@ -272,7 +276,7 @@ def count_y_increase():
             for shoe in shoes:
                 shoe.velocity_y += shoe.move_speed
             for student in students:
-                student.velocity_y += student.move_speed
+                student.velocity_draw_y += student.move_speed
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
@@ -283,7 +287,7 @@ def count_y_increase():
         for shoe in shoes:
             shoe.velocity_y -= shoe.move_speed
         for student in students:
-            student.velocity_y -= student.move_speed
+            student.velocity_draw_y -= student.move_speed
         #for resident in residents:
         #   resident.y -= penguin.move_speed
 
@@ -299,7 +303,7 @@ def count_x_decrease():
             for shoe in shoes:
                 shoe.velocity_x -= shoe.move_speed
             for student in students:
-                student.velocity_x -= student.move_speed
+                student.velocity_draw_x -= student.move_speed
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
@@ -312,7 +316,7 @@ def count_x_decrease():
             for shoe in shoes:
                 shoe.velocity_x -= shoe.move_speed
             for student in students:
-                student.velocity_x -= student.move_speed
+                student.velocity_draw_x -= student.move_speed
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
@@ -323,7 +327,7 @@ def count_x_decrease():
         for shoe in shoes:
             shoe.velocity_x += shoe.move_speed
         for student in students:
-            student.velocity_x += student.move_speed
+            student.velocity_draw_x += student.move_speed
         #for resident in residents:
         #       resident.x += penguin.move_speed
 
@@ -336,7 +340,7 @@ def count_y_decrease():
             for shoe in shoes:
                 shoe.velocity_y -= shoe.move_speed
             for student in students:
-                student.velocity_y -= student.move_speed
+                student.velocity_draw_y -= student.move_speed
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
 
@@ -348,7 +352,7 @@ def count_y_decrease():
             for shoe in shoes:
                 shoe.velocity_y -= shoe.move_speed
             for student in students:
-                student.velocity_y -= student.move_speed
+                student.velocity_draw_y -= student.move_speed
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
 
@@ -359,7 +363,7 @@ def count_y_decrease():
         for shoe in shoes:
             shoe.velocity_y += shoe.move_speed
         for student in students:
-            student.velocity_y += student.move_speed
+            student.velocity_draw_y += student.move_speed
         #for resident in residents:
         #    resident.y += penguin.move_speed
 
