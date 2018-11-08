@@ -48,25 +48,25 @@ class Human:
         pass
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
-        self.x += int(self.velocity_x * game_framework.frame_time)
-        self.y += int(self.velocity_y * game_framework.frame_time)
-        self.velocity_x = 0
-        self.velocity_y = 0
-
         self.count_change_dir += 1
         if self.count_change_dir >= 300:
             self.count_change_dir = 0
             self.direct = random.randint(0, 3)
 
         if self.direct == 1:
-            self.x += 0.1
+            self.velocity_x += 150
         if self.direct == 2:
-            self.x -= 0.1
+            self.velocity_x -= 150
         if self.direct == 0:
-            self.y += 0.1
+            self.velocity_y += 150
         if self.direct == 3:
-            self.y -= 0.1
+            self.velocity_y -= 150
+
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+        self.x += int(self.velocity_x * game_framework.frame_time)
+        self.y += int(self.velocity_y * game_framework.frame_time)
+        self.velocity_x = 0
+        self.velocity_y = 0
 
     def draw(self):
         if self.human_type == 'red_student':
