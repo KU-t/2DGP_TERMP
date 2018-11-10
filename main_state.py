@@ -120,7 +120,7 @@ def update():
             if penguin.time_life == 0:
                 penguin.time_life = 300
                 life.life -= 1
-        if (penguin.x - student.x)**2 + (penguin.y - student.y)**2 <= 10000:
+        if (penguin.x - student.x)**2 + (penguin.y - student.y)**2 <= 20000:
             student.state = 'follow'
         else:
             student.state = 'move'

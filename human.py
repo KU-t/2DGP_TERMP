@@ -77,6 +77,15 @@ class Human:
                 self.velocity_y -= 100
 
         if self.state == 'follow':
+            if self.x > main_state.penguin.x and self.y > main_state.penguin.y:
+                self.direct = 2
+            elif self.x > main_state.penguin.x and self.y < main_state.penguin.y:
+                self.direct = 0
+            elif self.x < main_state.penguin.x and self.y > main_state.penguin.y:
+                self.direct = 3
+            elif self.x < main_state.penguin.x and self.y < main_state.penguin.y:
+                self.direct = 1
+
             self.velocity_draw_x -= (self.x - main_state.penguin.x)
             self.velocity_draw_y -= (self.y - main_state.penguin.y)
             self.velocity_x -= (self.x - main_state.penguin.x)
