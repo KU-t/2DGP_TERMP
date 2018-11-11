@@ -65,15 +65,32 @@ def enter():
 
     global walls
     #세로 벽
-    walls = [Wall(i * 200, -300 + 5, i * 200, -150 - 5) for i in range(9)]
-    walls += [Wall(i * 200, 0 + 5, i * 200, 150 - 5) for i in range(9)]
-    walls += [Wall(i * 200, 450 + 5, i * 200, 600 - 5) for i in range(9)]
-    walls += [Wall(i * 200, 750 + 5, i * 200, 900 - 5) for i in range(9)]
+    walls = [Wall((i + 1) * 200, -300 + 5, (i + 1) * 200, -150 - 5) for i in range(7)]
+    walls += [Wall((i + 1) * 200, 0 + 5, (i + 1) * 200, 150 - 5) for i in range(4)]
+    walls += [Wall((i + 1) * 200, 450 + 5, (i + 1) * 200, 600 - 5) for i in range(4)]
+    walls += [Wall((i + 1) * 200, 750 + 5, (i + 1) * 200, 900 - 5) for i in range(7)]
+    walls += [Wall(0, -300, 0, 900), Wall(1600, -300, 1600, 900)]
 
-    #가로벽
+    #가로 벽
     walls += [Wall(0 + 5, - 300 + i * 150, 1600 - 5, -300 + i * 150) for i in range(9) if i == 0 or i == 8]
     walls += [Wall(0 + 5, - 300 + i * 150, 1200, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
     walls += [Wall(1400, - 300 + i * 150, 1600 + 5, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+
+    #입구 벽
+    walls += [Wall(-100 + 400 * i + 5, - 300 + 150, 100 + 400 * i - 5, -300 + 150) for i in range(5)]
+    walls += [Wall(-100 + 400 * i + 5, - 300 + 300, 100 + 400 * i - 5, -300 + 300) for i in range(5) if not i == 3]
+    walls += [Wall(-100 + 400 * 3 + 5, - 300 + 300, 100 + 400 * 3 - 100, -300 + 300)]
+    walls += [Wall(-100 + 400 * i + 5, - 300 + 900, 100 + 400 * i - 5, -300 + 900) for i in range(5) if not i == 3]
+    walls += [Wall(-100 + 400 * 3 + 5, -300 + 900, 100 + 400 * 3 - 100, -300 + 900)]
+    walls += [Wall(-100 + 400 * i + 5, -300 + 1050, 100 + 400 * i - 5, -300 + 1050) for i in range(5)]
+
+    #입구 & 휴게실 & 중앙문
+    walls += [Wall(1200, 0, 1200, 200), Wall(1200, 400, 1200, 600)]
+    walls += [Wall(1400, 0, 1400, 200), Wall(1400, 300, 1400, 600)]
+    walls += [Wall(1200, 200, 1200, 400)]
+    #walls += [Wall(0 + 5, - 300 + i * 150, 1200, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+    #walls += [Wall(1400, - 300 + i * 150, 1600 + 5, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+
     for wall in walls:
         game_world.add_object(wall, 0)
 
