@@ -61,20 +61,20 @@ class Human:
                 self.direct = random.randint(0, 3)
 
             if self.direct == 1:
-                self.velocity_draw_x += 100
-                self.velocity_x += 100
+                self.velocity_draw_x += self.move_speed
+                self.velocity_x += self.move_speed
 
             if self.direct == 2:
-                self.velocity_draw_x -= 100
-                self.velocity_x -= 100
+                self.velocity_draw_x -= self.move_speed
+                self.velocity_x -= self.move_speed
 
             if self.direct == 0:
-                self.velocity_draw_y += 100
-                self.velocity_y += 100
+                self.velocity_draw_y += self.move_speed
+                self.velocity_y += self.move_speed
 
             if self.direct == 3:
-                self.velocity_draw_y -= 100
-                self.velocity_y -= 100
+                self.velocity_draw_y -= self.move_speed
+                self.velocity_y -= self.move_speed
 
         if self.state == 'follow':
             if self.x > main_state.penguin.x and self.y > main_state.penguin.y:
@@ -112,8 +112,8 @@ class Human:
             Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
 
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
-        self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        #self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
+        #self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
     def handle_event(self, event):
        pass

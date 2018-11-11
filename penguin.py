@@ -75,12 +75,12 @@ class Penguin:
         else:
             self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y)
 
-        self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (0, 0, 0))
-        self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
-        self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
-        self.font.draw(self.draw_x - 100, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
-        self.font.draw(self.draw_x - 100, self.draw_y + 140, '(x,: %3.2f)' % self.x , (0, 0, 0))
-        self.font.draw(self.draw_x - 100, self.draw_y + 160, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        #self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (0, 0, 0))
+        #self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
+        #self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
+        #self.font.draw(self.draw_x - 100, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
+        #self.font.draw(self.draw_x - 100, self.draw_y + 140, '(x,: %3.2f)' % self.x , (0, 0, 0))
+        #self.font.draw(self.draw_x - 100, self.draw_y + 160, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
         #fill here
         draw_rectangle(*self.get_bb())

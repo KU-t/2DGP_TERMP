@@ -12,7 +12,7 @@ from human import Human
 from tip import Tip
 from life import Life
 from shoe import Shoe
-
+from wall import Wall
 name = "MainState"
 
 penguin = None
@@ -20,6 +20,7 @@ students = []
 tip = None
 life = None
 shoes = []
+walls = []
 #balls = []
 #big_balls = []
 
@@ -61,6 +62,20 @@ def enter():
     shoes = [Shoe(i * 50, i * 100) for i in range(10)]
     for shoe in shoes:
         game_world.add_object(shoe, 0)
+
+    global walls
+    #세로 벽
+    walls = [Wall(i * 200, -300 + 5, i * 200, -150 - 5) for i in range(9)]
+    walls += [Wall(i * 200, 0 + 5, i * 200, 150 - 5) for i in range(9)]
+    walls += [Wall(i * 200, 450 + 5, i * 200, 600 - 5) for i in range(9)]
+    walls += [Wall(i * 200, 750 + 5, i * 200, 900 - 5) for i in range(9)]
+
+    #가로벽
+    walls += [Wall(0 + 5, - 300 + i * 150, 1600 - 5, -300 + i * 150) for i in range(9) if i == 0 or i == 8]
+    walls += [Wall(0 + 5, - 300 + i * 150, 1200, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+    walls += [Wall(1400, - 300 + i * 150, 1600 + 5, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+    for wall in walls:
+        game_world.add_object(wall, 0)
 
     # fill here for balls
     #global balls
@@ -133,6 +148,10 @@ def update():
             shoe.exist = False
             shoes.remove(shoe)
             game_world.remove_object(shoes)
+
+    for wall in walls:
+        if collide(penguin, wall):
+            pass
 
     #for ball in balls:
     #    if collide(boy, ball):
@@ -227,6 +246,8 @@ def count_x_increase():
                 shoe.velocity_x += shoe.move_speed
             for student in students:
                 student.velocity_draw_x += student.move_speed
+            for wall in walls:
+                wall.velocity_x += wall.move_speed
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
@@ -239,6 +260,8 @@ def count_x_increase():
                 shoe.velocity_x += shoe.move_speed
             for student in students:
                 student.velocity_draw_x += student.move_speed
+            for wall in walls:
+                wall.velocity_x += wall.move_speed
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
@@ -250,6 +273,8 @@ def count_x_increase():
             shoe.velocity_x -= shoe.move_speed
         for student in students:
             student.velocity_draw_x -= student.move_speed
+        for wall in walls:
+            wall.velocity_x -= wall.move_speed
         #for resident in residents:
         #    resident.x -= penguin.move_speed
 
@@ -264,12 +289,14 @@ def count_y_increase():
                 shoe.velocity_y += shoe.move_speed
             for student in students:
                 student.velocity_draw_y += student.move_speed
+            for wall in walls:
+                wall.velocity_y += wall.move_speed
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
 
 
-    elif penguin.y >= 20:
+    elif penguin.y > 20:
 
         if penguin.y < 300:
             penguin.velocity_draw_y += penguin.move_speed
@@ -277,6 +304,8 @@ def count_y_increase():
                 shoe.velocity_y += shoe.move_speed
             for student in students:
                 student.velocity_draw_y += student.move_speed
+            for wall in walls:
+                wall.velocity_y += wall.move_speed
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
@@ -288,6 +317,8 @@ def count_y_increase():
             shoe.velocity_y -= shoe.move_speed
         for student in students:
             student.velocity_draw_y -= student.move_speed
+        for wall in walls:
+            wall.velocity_y -= wall.move_speed
         #for resident in residents:
         #   resident.y -= penguin.move_speed
 
@@ -304,6 +335,8 @@ def count_x_decrease():
                 shoe.velocity_x -= shoe.move_speed
             for student in students:
                 student.velocity_draw_x -= student.move_speed
+            for wall in walls:
+                wall.velocity_x -= wall.move_speed
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
@@ -317,6 +350,8 @@ def count_x_decrease():
                 shoe.velocity_x -= shoe.move_speed
             for student in students:
                 student.velocity_draw_x -= student.move_speed
+            for wall in walls:
+                wall.velocity_x -= wall.move_speed
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
@@ -328,6 +363,8 @@ def count_x_decrease():
             shoe.velocity_x += shoe.move_speed
         for student in students:
             student.velocity_draw_x += student.move_speed
+        for wall in walls:
+            wall.velocity_x += wall.move_speed
         #for resident in residents:
         #       resident.x += penguin.move_speed
 
@@ -341,6 +378,8 @@ def count_y_decrease():
                 shoe.velocity_y -= shoe.move_speed
             for student in students:
                 student.velocity_draw_y -= student.move_speed
+            for wall in walls:
+                wall.velocity_y -= wall.move_speed
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
 
@@ -353,6 +392,8 @@ def count_y_decrease():
                 shoe.velocity_y -= shoe.move_speed
             for student in students:
                 student.velocity_draw_y -= student.move_speed
+            for wall in walls:
+                wall.velocity_y -= wall.move_speed
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
 
@@ -364,10 +405,7 @@ def count_y_decrease():
             shoe.velocity_y += shoe.move_speed
         for student in students:
             student.velocity_draw_y += student.move_speed
+        for wall in walls:
+            wall.velocity_y += wall.move_speed
         #for resident in residents:
         #    resident.y += penguin.move_speed
-
-
-
-
-
