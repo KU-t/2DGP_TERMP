@@ -23,7 +23,7 @@ class Human:
     move_speed = 300
 
     def __init__(self, draw_x = 400, draw_y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
-        self.x, self.y = draw_x, draw_y + 300
+        self.x, self.y = draw_x + 800, draw_y + 300
         self.draw_x, self.draw_y = draw_x, draw_y
         self.velocity_x, self.velocity_y = 0, 0
         self.velocity_draw_x, self.velocity_draw_y = 0, 0
@@ -54,7 +54,7 @@ class Human:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-        if self.state == 'move':
+        if self.state == 'moves':
             self.count_change_dir += 1
             if self.count_change_dir >= 300:
                 self.count_change_dir = 0
@@ -112,8 +112,8 @@ class Human:
             Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
 
         draw_rectangle(*self.get_bb())
-        #self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
-        #self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
+        self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
     def handle_event(self, event):
        pass

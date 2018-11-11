@@ -19,7 +19,7 @@ FRAMES_PER_ACTION = 8
 class Penguin:
 
     def __init__(self):
-        self.x, self.y, self.move_frame, self.direct_frame = 400, 600, 0, 0
+        self.x, self.y, self.move_frame, self.direct_frame = 1200, 600, 0, 0
         self.draw_x, self.draw_y = 400, 300
         self.image = load_image('penguin.png')
         self.direction = [False, False, False, False]
@@ -79,8 +79,8 @@ class Penguin:
         #self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
         #self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
         #self.font.draw(self.draw_x - 100, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
-        #self.font.draw(self.draw_x - 100, self.draw_y + 140, '(x,: %3.2f)' % self.x , (0, 0, 0))
-        #self.font.draw(self.draw_x - 100, self.draw_y + 160, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        self.font.draw(self.draw_x - 100, self.draw_y + 160, '(x,: %3.2f)' % self.x , (0, 0, 0))
+        self.font.draw(self.draw_x - 100, self.draw_y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
         #fill here
         draw_rectangle(*self.get_bb())
