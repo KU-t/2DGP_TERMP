@@ -23,7 +23,7 @@ class Wall:
 
     def get_bb(self):
         # fill here
-        return self.sx - self.draw_x - 10, self.sy - self.draw_y - 10, self.ex - self.draw_x + 10, self.ey - self.draw_y + 10
+        return self.sx - self.draw_x - 5, self.sy - self.draw_y - 5, self.ex - self.draw_x + 5, self.ey - self.draw_y + 5
 
     def draw(self):
         if self.exist:
