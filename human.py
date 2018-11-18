@@ -43,6 +43,9 @@ class Human:
         # fill here
         return self.draw_x - 14, self.draw_y - 25, self.draw_x + 20, self.draw_y + 25
 
+    def get_bb_collision_wall(self):
+        return self.draw_x + int(self.velocity_draw_x * game_framework.frame_time) - 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time) - 20, self.draw_x + int(self.velocity_draw_x * game_framework.frame_time)+ 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time)+ 16
+
 
     def fire_ball(self):
         pass
