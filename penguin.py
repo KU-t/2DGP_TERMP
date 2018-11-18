@@ -19,8 +19,7 @@ FRAMES_PER_ACTION = 8
 class Penguin:
 
     def __init__(self):
-        self.x, self.y, self.move_frame, self.direct_frame = 1200 + 20, 600, 0, 0
-        self.draw_x, self.draw_y = 400 + 20, 300
+        self.x, self.y, self.move_frame, self.direct_frame = 1200 + 60, 600, 0, 0
         self.image = load_image('penguin.png')
         self.direction = [False, False, False, False]
         self.move_speed = 300
@@ -29,16 +28,15 @@ class Penguin:
         self.item = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.velocity_x, self.velocity_y = 0, 0
-        self.velocity_draw_x, self.velocity_draw_y = 0, 0
 
 
 
     def get_bb(self):
         # fill here
-        return self.draw_x - 12, self.draw_y - 20, self.draw_x + 12, self.draw_y + 16
+        return 400 - 12, 300 - 20, 400 + 12, 300 + 16
 
     def get_bb_collision_wall(self):
-        return self.draw_x + int(self.velocity_draw_x * game_framework.frame_time) - 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time) - 20, self.draw_x + int(self.velocity_draw_x * game_framework.frame_time)+ 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time)+ 16
+        return 400 + int(self.velocity_x * game_framework.frame_time) - 12, 300 + int(self.velocity_y * game_framework.frame_time) - 20, 400 + int(self.velocity_x * game_framework.frame_time)+ 12, 300 + int(self.velocity_y * game_framework.frame_time)+ 16
 
     def fire_ball(self):
         pass
@@ -50,16 +48,10 @@ class Penguin:
         self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
         self.x += int(self.velocity_x * game_framework.frame_time)
-        self.draw_x += int(self.velocity_draw_x * game_framework.frame_time)
-
         self.y += int(self.velocity_y * game_framework.frame_time)
-        self.draw_y += int(self.velocity_draw_y * game_framework.frame_time)
 
         self.velocity_x = 0
-        self.velocity_draw_x = 0
         self.velocity_y = 0
-        self.velocity_draw_y = 0
-
 
         if self.time_life > 0:
             self.time_life -= 1
@@ -68,24 +60,24 @@ class Penguin:
     def draw(self):
 
         if self.direct_frame == 0:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y - 2)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, 400, 300 - 2)
         elif self.direct_frame == 4:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 34, 45, self.draw_x + 2, self.draw_y - 4)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 34, 45, 400 + 2, 300 - 4)
         elif self.direct_frame == 5:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 34, 45, self.draw_x + 5, self.draw_y - 7)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 34, 45, 400 + 5, 300 - 7)
         elif self.direct_frame == 6:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x + 6, self.draw_y - 7)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, 400 + 6, 300 - 7)
         elif self.direct_frame == 7:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x + 5, self.draw_y - 4)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, 400 + 5, 300 - 4)
         else:
-            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, self.draw_x, self.draw_y)
+            self.image.clip_draw(int(self.move_frame) * 35, self.direct_frame * 47 + 35, 35, 45, 400, 300)
 
         #self.font.draw(self.draw_x - 50, self.draw_y + 60, '(Time: %3.2f)' % get_time(), (0, 0, 0))
         #self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
         #self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
         #self.font.draw(self.draw_x - 100, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
-        self.font.draw(self.draw_x - 100, self.draw_y + 160, '(x,: %3.2f)' % self.x , (0, 0, 0))
-        self.font.draw(self.draw_x - 100, self.draw_y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        self.font.draw(self.x - 100, self.y + 160, '(x,: %3.2f)' % self.x , (0, 0, 0))
+        self.font.draw(self.x - 100, self.y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
         #fill here
         draw_rectangle(*self.get_bb())

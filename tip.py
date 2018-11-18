@@ -15,7 +15,7 @@ class Tip:
         return self.x - 800, self.y - 600, self.x + 800, self.y + 600
 
     def draw(self):
-        self.image.clip_draw(main_state.penguin .x - main_state.penguin.draw_x, main_state.penguin.y - main_state.penguin.draw_y, 800, 600, 400, 300)
+        self.image.clip_draw(main_state.penguin.x, main_state.penguin.y, 800, 600, 400, 300)
 
 
     def update(self):

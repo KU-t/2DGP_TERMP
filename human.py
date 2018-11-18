@@ -22,7 +22,7 @@ class Human:
     move_speed = 300
 
     def __init__(self, draw_x = 400, draw_y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
-        self.x, self.y = draw_x + 800, draw_y + 300
+        self.x, self.y = draw_x + 1200, draw_y + 600
         self.draw_x, self.draw_y = draw_x, draw_y
         self.velocity_x, self.velocity_y = 0, 0
         self.velocity_draw_x, self.velocity_draw_y = 0, 0
