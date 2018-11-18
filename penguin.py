@@ -19,8 +19,8 @@ FRAMES_PER_ACTION = 8
 class Penguin:
 
     def __init__(self):
-        self.x, self.y, self.move_frame, self.direct_frame = 1200, 600, 0, 0
-        self.draw_x, self.draw_y = 400, 300
+        self.x, self.y, self.move_frame, self.direct_frame = 1200 + 20, 600, 0, 0
+        self.draw_x, self.draw_y = 400 + 20, 300
         self.image = load_image('penguin.png')
         self.direction = [False, False, False, False]
         self.move_speed = 300
@@ -39,6 +39,8 @@ class Penguin:
         # fill here
         return self.draw_x - 12, self.draw_y - 20, self.draw_x + 12, self.draw_y + 16
 
+    def get_bb_collision_wall(self):
+        return self.draw_x + int(self.velocity_draw_x * game_framework.frame_time) - 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time) - 20, self.draw_x + int(self.velocity_draw_x * game_framework.frame_time)+ 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time)+ 16
 
     def fire_ball(self):
         pass
@@ -48,14 +50,19 @@ class Penguin:
 
     def update(self):
         self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
+
         self.x += int(self.velocity_x * game_framework.frame_time)
-        self.y += int(self.velocity_y * game_framework.frame_time)
         self.draw_x += int(self.velocity_draw_x * game_framework.frame_time)
+
+        self.y += int(self.velocity_y * game_framework.frame_time)
         self.draw_y += int(self.velocity_draw_y * game_framework.frame_time)
+
         self.velocity_x = 0
-        self.velocity_y = 0
         self.velocity_draw_x = 0
+        self.velocity_y = 0
         self.velocity_draw_y = 0
+
+
         if self.time_life > 0:
             self.time_life -= 1
 
@@ -84,6 +91,7 @@ class Penguin:
 
         #fill here
         draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb_collision_wall())
 
     def handle_event(self, event):
        pass

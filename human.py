@@ -54,7 +54,7 @@ class Human:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-        if self.state == 'moves':
+        if self.state == 'move':
             self.count_change_dir += 1
             if self.count_change_dir >= 300:
                 self.count_change_dir = 0

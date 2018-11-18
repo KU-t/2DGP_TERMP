@@ -36,7 +36,35 @@ def collide(a, b):
     if bottom_a > top_b : return False
     return True
 
+def collide_x_character_wall(character, wall):
+    left_a, bottom_a, right_a, top_a = character.get_bb_collision_wall()
+    left_b, bottom_b, right_b, top_b = wall.get_bb()
 
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    if left_b <= left_a and left_a <= right_b:
+        character.velocity_x = 0
+        character.velocity_draw_x = 0
+
+    elif left_b <= right_a and right_a <= right_b:
+        character.velocity_x = 0
+        character.velocity_draw_x = 0
+
+def collide_y_character_wall(character, wall):
+    left_a, bottom_a, right_a, top_a = character.get_bb_collision_wall()
+    left_b, bottom_b, right_b, top_b = wall.get_bb()
+
+    if left_a > right_b : return False
+    if right_a < left_b : return False
+
+    if bottom_b <= bottom_a and bottom_a <= top_b:
+        character.velocity_y = 0
+        character.velocity_draw_y = 0
+
+    elif bottom_b <= top_a and top_a <= top_b:
+        character.velocity_y = 0
+        character.velocity_draw_y = 0
 
 
 def enter():
@@ -141,6 +169,10 @@ def handle_events():
             penguin.direction[3] = False
 
 def update():
+    for wall in walls:
+        collide_x_character_wall(penguin, wall)
+        #collide_y_character_wall(penguin, wall)
+        pass
 
     for game_object in game_world.all_objects():
         game_object.update()
@@ -148,6 +180,9 @@ def update():
 
     # fill here for collision check
     for student in students:
+        #for wall in walls:
+        #    collide_character_wall(student, wall)
+
         if collide(penguin, student):
             if penguin.time_life == 0:
                 penguin.time_life = 300
@@ -165,10 +200,6 @@ def update():
             shoe.exist = False
             shoes.remove(shoe)
             game_world.remove_object(shoes)
-
-    for wall in walls:
-        if collide(penguin, wall):
-            pass
 
     #for ball in balls:
     #    if collide(boy, ball):
