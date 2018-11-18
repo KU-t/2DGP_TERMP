@@ -76,12 +76,12 @@ class Penguin:
         #self.font.draw(self.draw_x - 50, self.draw_y + 80, '(life: %3.2f)' % self.time_life, (0, 0, 0))
         #self.font.draw(self.draw_x - 50, self.draw_y + 100, '(item: %3.2f)' % self.item, (0, 0, 0))
         #self.font.draw(self.draw_x - 100, self.draw_y + 120, '(Frametime: %3.2f)' % game_framework.frame_time, (0, 0, 0))
-        self.font.draw(self.x - 100, self.y + 160, '(x,: %3.2f)' % self.x , (0, 0, 0))
-        self.font.draw(self.x - 100, self.y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
+        #self.font.draw(self.x - 100, self.y + 160, '(x,: %3.2f)' % self.x , (0, 0, 0))
+        #self.font.draw(self.x - 100, self.y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
         #fill here
-        draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_bb_collision_wall())
+        #draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb_collision_wall())
 
     def handle_event(self, event):
        pass

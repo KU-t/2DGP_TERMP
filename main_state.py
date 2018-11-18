@@ -169,6 +169,10 @@ def update():
             for wall in walls:
                 wall.velocity_y = 0
 
+    for student in students:
+        if collide_y_character_wall(student, wall):
+            student.velocity_y
+
     for game_object in game_world.all_objects():
         game_object.update()
     update_obj()

@@ -27,9 +27,10 @@ class Wall:
 
     def draw(self):
         if self.exist:
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
             #self.font.draw(self.sx - self.draw_x, self.sy - self.draw_y + 10, '(x,: %3.2f)' % self.sx, (0, 0, 0))
             #self.font.draw(self.sx - self.draw_x, self.sy - self.draw_y - 10, '(y,: %3.2f)' % self.sy, (0, 0, 0))
+            pass
 
     def update(self):
         #self.y -= self.fall_speed * game_framework.frame_time
