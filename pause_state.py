@@ -51,7 +51,6 @@ def draw():
     if frame//100 == 1:
         image.draw(400, 300)
 
-
     update_canvas()
 
 

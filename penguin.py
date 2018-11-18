@@ -27,8 +27,6 @@ class Penguin:
         self.time_life = 0
         self.state = 'move'
         self.item = 0
-        #self.x, self.y = 1600 // 2, 90
-        # Boy is only once created, so instance image loading is fine
         self.font = load_font('ENCR10B.TTF', 16)
         self.velocity_x, self.velocity_y = 0, 0
         self.velocity_draw_x, self.velocity_draw_y = 0, 0

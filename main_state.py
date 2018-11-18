@@ -21,9 +21,6 @@ tip = None
 life = None
 shoes = []
 walls = []
-#balls = []
-#big_balls = []
-
 
 def collide(a, b):
     # fill here
@@ -118,10 +115,6 @@ def enter():
     for wall in walls:
         game_world.add_object(wall, 0)
 
-    # fill here for balls
-    #global balls
-    #balls = [Ball() for i in range(10)] + [BigBall() for i in range(10)]
-    #game_world.add_objects(balls, 1)
 
 
 
@@ -180,8 +173,6 @@ def update():
 
     # fill here for collision check
     for student in students:
-        #for wall in walls:
-        #    collide_character_wall(student, wall)
 
         if collide(penguin, student):
             if penguin.time_life == 0:
@@ -201,23 +192,11 @@ def update():
             shoes.remove(shoe)
             game_world.remove_object(shoes)
 
-    #for ball in balls:
-    #    if collide(boy, ball):
-    #        balls.remove(ball)
-    #        game_world.remove_object(ball)
-    #for ball in balls:
-    #    if collide(grass, ball):
-    #        ball.stop()
-
-    #delay(0.2)
-
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
     update_canvas()
-
-
 
 def move_obj():
     if penguin.direction[0] == True:
@@ -260,30 +239,8 @@ def move_obj():
         count_x_increase()
         penguin.direct_frame = 1
 
-
-
-
-
 def update_obj():
-    #penguin.move_frame = (penguin.move_frame + 1) % 8
-    #penguin.move_frame = (int)(penguin.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-    #for student in students:
-    #    student.frame = (student.frame + 1) % 3
-    #    if student.frame == 0:
-    #        student.direct = random.randrange(0, 4)
-    #for resident in residents:
-    #    resident.frame = (resident.frame + 1) % 3
-    #    #resident.x += 5;
-    #    if resident.frame == 0:
-    #        resident.direct = random.randrange(0, 4)
-
     move_obj()
-
-
-
-
-
-
 
 def count_x_increase():
 
@@ -299,8 +256,6 @@ def count_x_increase():
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
-
-
     elif penguin.x < 400:
         if penguin.x >= 10:
             penguin.velocity_draw_x += penguin.move_speed
@@ -313,8 +268,6 @@ def count_x_increase():
             #for resident in residents:
             #    resident.x += penguin.move_speed
 
-
-
     if penguin.x < 1590:
         penguin.velocity_x += penguin.move_speed
         for shoe in shoes:
@@ -325,8 +278,6 @@ def count_x_increase():
             wall.velocity_x -= wall.move_speed
         #for resident in residents:
         #    resident.x -= penguin.move_speed
-
-
 
 def count_y_increase():
 
@@ -342,8 +293,6 @@ def count_y_increase():
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
-
-
     elif penguin.y > 20:
 
         if penguin.y < 300:
@@ -357,8 +306,6 @@ def count_y_increase():
             #for resident in residents:
             #    resident.y += penguin.move_speed
 
-
-
     if penguin.y < 1180:
         penguin.velocity_y += penguin.move_speed
         for shoe in shoes:
@@ -369,10 +316,6 @@ def count_y_increase():
             wall.velocity_y -= wall.move_speed
         #for resident in residents:
         #   resident.y -= penguin.move_speed
-
-
-
-
 
 def count_x_decrease():
 
@@ -388,8 +331,6 @@ def count_x_decrease():
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
-
-
     elif penguin.x > 1200:
 
         if penguin.x <= 1590:
@@ -403,8 +344,6 @@ def count_x_decrease():
             #for resident in residents:
             #    resident.x -= penguin.move_speed
 
-
-
     if penguin.x > 10:
         penguin.velocity_x -= penguin.move_speed
         for shoe in shoes:
@@ -415,8 +354,6 @@ def count_x_decrease():
             wall.velocity_x += wall.move_speed
         #for resident in residents:
         #       resident.x += penguin.move_speed
-
-
 
 def count_y_decrease():
     if penguin.y > 900:
@@ -431,8 +368,6 @@ def count_y_decrease():
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
 
-
-
     elif penguin.y > 20:
         if penguin.y <= 300:
             penguin.velocity_draw_y -= penguin.move_speed
@@ -444,8 +379,6 @@ def count_y_decrease():
                 wall.velocity_y -= wall.move_speed
         #    for resident in residents:
         #        resident.y -= penguin.move_speed
-
-
 
     if penguin.y > 20:
         penguin.velocity_y -= penguin.move_speed

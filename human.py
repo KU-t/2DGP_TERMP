@@ -3,7 +3,6 @@ import random
 from pico2d import *
 import main_state
 
-import game_world
 
 # Boy Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -40,7 +39,6 @@ class Human:
 
 
     def get_bb(self):
-        # fill here
         return self.draw_x - 14, self.draw_y - 25, self.draw_x + 20, self.draw_y + 25
 
     def get_bb_collision_wall(self):

@@ -11,11 +11,6 @@ class Wall:
 
     image = None
     move_speed = 300
-    #move_speed = penguin.move_speed
-    #def __init__(self):
-    #    if Tip.image == None:
-    #        Tip.image = load_image('ball21x21.png')
-    #    self.x, self.y, self.fall_speed = random.randint(0, 1600-1), 60, 0
     def __init__(self, sx = 400, sy = 300, ex = 500, ey = 400):
         self.sx, self.sy = sx, sy
         self.ex, self.ey = ex, ey
@@ -30,10 +25,6 @@ class Wall:
         # fill here
         return self.sx - self.draw_x - 5, self.sy - self.draw_y - 5, self.ex - self.draw_x + 5, self.ey - self.draw_y + 5
 
-    #def draw(self):
-    #    self.image.draw(self.x, self.y)
-    #    # fill here for draw
-    #    draw_rectangle(*self.get_bb())
     def draw(self):
         if self.exist:
             draw_rectangle(*self.get_bb())
