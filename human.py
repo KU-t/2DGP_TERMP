@@ -4,6 +4,7 @@ from pico2d import *
 import main_state
 
 
+
 # Boy Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
 RUN_SPEED_KMPH = 20.0  # Km / Hour
@@ -21,11 +22,9 @@ class Human:
     image = None
     move_speed = 300
 
-    def __init__(self, draw_x = 400, draw_y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
-        self.x, self.y = draw_x + 1200, draw_y + 600
-        self.draw_x, self.draw_y = draw_x, draw_y
+    def __init__(self, x = 400, y = 400, dir = random.randint(0,4), human_type = 'blue_student'):
+        self.x, self.y = x, y
         self.velocity_x, self.velocity_y = 0, 0
-        self.velocity_draw_x, self.velocity_draw_y = 0, 0
         self.human_type = human_type
         self.state = 'sleep'
         self.frame = 0
@@ -39,10 +38,10 @@ class Human:
 
 
     def get_bb(self):
-        return self.draw_x - 14, self.draw_y - 25, self.draw_x + 20, self.draw_y + 25
+        return self.x - 14, self.y - 25, self.x + 20, self.y + 25
 
     def get_bb_collision_wall(self):
-        return self.draw_x + int(self.velocity_draw_x * game_framework.frame_time) - 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time) - 20, self.draw_x + int(self.velocity_draw_x * game_framework.frame_time)+ 12, self.draw_y + int(self.velocity_draw_y * game_framework.frame_time)+ 16
+        return self.x + int(self.velocity_x * game_framework.frame_time) - 14, self.y + int(self.velocity_y * game_framework.frame_time) - 25, self.x + int(self.velocity_x * game_framework.frame_time)+ 20, self.y + int(self.velocity_y * game_framework.frame_time)+ 25
 
 
     def fire_ball(self):
@@ -53,6 +52,10 @@ class Human:
         pass
 
     def update(self):
+
+
+
+
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
         if self.state == 'move':
@@ -62,22 +65,19 @@ class Human:
                 self.direct = random.randint(0, 3)
 
             if self.direct == 1:
-                self.velocity_draw_x += self.move_speed
                 self.velocity_x += self.move_speed
 
             if self.direct == 2:
-                self.velocity_draw_x -= self.move_speed
                 self.velocity_x -= self.move_speed
 
             if self.direct == 0:
-                self.velocity_draw_y += self.move_speed
                 self.velocity_y += self.move_speed
 
             if self.direct == 3:
-                self.velocity_draw_y -= self.move_speed
                 self.velocity_y -= self.move_speed
 
         if self.state == 'follow':
+            pass
             if self.x > main_state.penguin.x and self.y > main_state.penguin.y:
                 self.direct = 2
             elif self.x > main_state.penguin.x and self.y < main_state.penguin.y:
@@ -87,32 +87,27 @@ class Human:
             elif self.x < main_state.penguin.x and self.y < main_state.penguin.y:
                 self.direct = 1
 
-            self.velocity_draw_x -= (self.x - main_state.penguin.x)
-            self.velocity_draw_y -= (self.y - main_state.penguin.y)
             self.velocity_x -= (self.x - main_state.penguin.x)
             self.velocity_y -= (self.y - main_state.penguin.y)
 
 
-        self.draw_x += int(self.velocity_draw_x * game_framework.frame_time)
-        self.draw_y += int(self.velocity_draw_y * game_framework.frame_time)
         self.x += int(self.velocity_x * game_framework.frame_time)
         self.y += int(self.velocity_y * game_framework.frame_time)
-        self.velocity_draw_x = 0
-        self.velocity_draw_y = 0
         self.velocity_x = 0
         self.velocity_y = 0
 
     def draw(self):
         if self.human_type == 'red_student':
-            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct, 32, 32, self.draw_x, self.draw_y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
         elif self.human_type == 'green_student':
-            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct, 32, 32, self.draw_x, self.draw_y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct, 32, 32, self.x, self.y, 48, 48)
         elif self.human_type == 'blue_student':
-            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32 + 32 * 3, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
         elif self.human_type == 'resident':
-            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.draw_x, self.draw_y, 48, 48)
+            Human.image.clip_draw(int(self.frame) * 32, 32 * self.direct + 32 * 4, 32, 32, self.x, self.y, 48, 48)
 
-        #draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb_collision_wall())
         #self.font.draw(self.draw_x + 10, self.draw_y + 10, '(x,: %3.2f)' % self.x, (0, 0, 0))
         #self.font.draw(self.draw_x + 10, self.draw_y - 10, '(y,: %3.2f)' % self.y, (0, 0, 0))
 

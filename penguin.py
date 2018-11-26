@@ -1,7 +1,8 @@
 import game_framework
 from pico2d import *
 
-import game_world
+import main_state
+
 
 # Boy Run Speed
 PIXEL_PER_METER = (10.0 / 1)  # 10 pixel 100 cm
@@ -35,8 +36,11 @@ class Penguin:
         # fill here
         return 400 - 12, 300 - 20, 400 + 12, 300 + 16
 
-    def get_bb_collision_wall(self):
-        return 400 + int(self.velocity_x * game_framework.frame_time) - 12, 300 + int(self.velocity_y * game_framework.frame_time) - 20, 400 + int(self.velocity_x * game_framework.frame_time)+ 12, 300 + int(self.velocity_y * game_framework.frame_time)+ 16
+    def get_bb_collision_x_wall(self):
+        return 400 + int(self.velocity_x * game_framework.frame_time) - 12, 300 - 20, 400 + int(self.velocity_x * game_framework.frame_time)+ 12, 300 + 16
+
+    def get_bb_collision_y_wall(self):
+        return 400 - 12, 300 + int(self.velocity_y * game_framework.frame_time) - 20, 400 + 12, 300 + int(self.velocity_y * game_framework.frame_time) + 16
 
     def fire_ball(self):
         pass
@@ -45,6 +49,7 @@ class Penguin:
         pass
 
     def update(self):
+
         self.move_frame = (self.move_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
         self.x += int(self.velocity_x * game_framework.frame_time)
@@ -80,8 +85,9 @@ class Penguin:
         #self.font.draw(self.x - 100, self.y + 140, '(y,: %3.2f)' % self.y, (0, 0, 0))
 
         #fill here
-        #draw_rectangle(*self.get_bb())
-        #draw_rectangle(*self.get_bb_collision_wall())
+        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb_collision_x_wall())
+        draw_rectangle(*self.get_bb_collision_y_wall())
 
     def handle_event(self, event):
        pass

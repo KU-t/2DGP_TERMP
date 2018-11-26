@@ -8,7 +8,7 @@ class Tip:
     image = None
 
     def __init__(self):
-        self.image = load_image('TIP.png')
+        self.image = load_image('TIP2.png')
 
 
     def get_bb(self):

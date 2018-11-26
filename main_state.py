@@ -29,37 +29,39 @@ def collide(a, b):
     if bottom_a > top_b : return False
     return True
 
-def collide_x_character_wall(character, wall):
-    left_a, bottom_a, right_a, top_a = character.get_bb_collision_wall()
-    left_b, bottom_b, right_b, top_b = wall.get_bb()
+def collide_x_character_wall(character, Walls):
+    left_a, bottom_a, right_a, top_a = character.get_bb_collision_x_wall()
 
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
+    for wall in Walls:
+        left_b, bottom_b, right_b, top_b = wall.get_bb()
 
-    if left_b <= left_a and left_a <= right_b:
-        return True
+        if bottom_b <= top_a and bottom_a <= top_b:
+            if left_b <= left_a and left_a <= right_b:
+                return True
+            if left_b <= right_a and right_a <= right_b:
+                return True
 
-    if left_b <= right_a and right_a <= right_b:
-        return True
+    return False
 
-def collide_y_character_wall(character, wall):
-    left_a, bottom_a, right_a, top_a = character.get_bb_collision_wall()
-    left_b, bottom_b, right_b, top_b = wall.get_bb()
+def collide_y_character_wall(character, Walls):
+    left_a, bottom_a, right_a, top_a = character.get_bb_collision_y_wall()
 
-    if left_a > right_b : return False
-    if right_a < left_b : return False
+    for wall in Walls:
+        left_b, bottom_b, right_b, top_b = wall.get_bb()
 
-    if bottom_b <= bottom_a and bottom_a <= top_b:
-        return True
+        if left_b <= right_a and left_a <= right_b:
+            if bottom_b <= bottom_a and bottom_a <= top_b:
+                return True
 
-    elif bottom_b <= top_a and top_a <= top_b:
-        return True
+            if bottom_b <= top_a and top_a <= top_b:
+                return True
 
+    return False
 
 def enter():
 
     global students
-    students = [Human(i * 100 - 800, i * 50, random.randint(0, 4)) for i in range(10)]
+    students = [Human(400, 300, random.randint(0, 4)) for i in range(10)]
     for student in students:
         game_world.add_object(student, 1)
 
@@ -86,7 +88,7 @@ def enter():
     walls += [Wall((i + 1) * 200 - 800 - 40, 0 + 5, (i + 1) * 200 - 800 - 40, 150 - 5) for i in range(5)]
     walls += [Wall((i + 1) * 200 - 800 - 40, 450 + 5, (i + 1) * 200 - 800 - 40, 600 - 5) for i in range(5)]
     walls += [Wall((i + 1) * 200 - 800 - 40, 750 + 5, (i + 1) * 200 - 800 - 40, 900 - 5) for i in range(7)]
-    walls += [Wall(0 - 800- 40, -300, 0 - 800 - 40, 900), Wall(1600 - 800 - 40, -300, 1600 - 800- 40, 900)]
+    walls += [Wall(0 - 800 - 40, -300, 0 - 800 - 40, 900), Wall(1600 - 800 - 40, -300, 1600 - 800- 40, 900)]
 
     #가로 벽
     walls += [Wall(0 + 5 - 800 - 40, - 300 + i * 150, 1600 - 5 - 800 - 40, -300 + i * 150) for i in range(9) if i == 0 or i == 8]
@@ -149,32 +151,11 @@ def handle_events():
             penguin.direction[3] = False
 
 def update():
-    for wall in walls:
-        if collide_x_character_wall(penguin, wall):
-            penguin.velocity_x = 0
-            for shoe in shoes:
-                shoe.velocity_x = 0
-            for student in students:
-                student.velocity_draw_x = 0
-            for wall in walls:
-                wall.velocity_x = 0
 
-    for wall in walls:
-        if collide_y_character_wall(penguin, wall):
-            penguin.velocity_y = 0
-            for shoe in shoes:
-                shoe.velocity_y = 0
-            for student in students:
-                student.velocity_draw_y = 0
-            for wall in walls:
-                wall.velocity_y = 0
-
-    for student in students:
-        if collide_y_character_wall(student, wall):
-            student.velocity_y
 
     for game_object in game_world.all_objects():
         game_object.update()
+
     update_obj()
 
     for student in students:
@@ -209,12 +190,15 @@ def move_obj():
             count_x_decrease()
             count_y_increase()
             penguin.direct_frame = 4
+
         elif penguin.direction[2] == True:
             pass
+
         elif penguin.direction[3] == True:
             count_x_increase()
             count_y_increase()
             penguin.direct_frame = 2
+
         else:
             count_y_increase()
             penguin.direct_frame = 3
@@ -225,8 +209,10 @@ def move_obj():
             count_x_decrease()
             count_y_decrease()
             penguin.direct_frame = 6
+
         elif penguin.direction[3] == True:
             pass
+
         else:
             count_x_decrease()
             penguin.direct_frame = 5
@@ -236,6 +222,7 @@ def move_obj():
             count_x_increase()
             count_y_decrease()
             penguin.direct_frame = 0
+
         else:
             count_y_decrease()
             penguin.direct_frame = 7
@@ -246,57 +233,67 @@ def move_obj():
 
 
 def update_obj():
-
     move_obj()
 
 def count_x_increase():
 
     penguin.velocity_x += penguin.move_speed
-    for shoe in shoes:
-        shoe.velocity_x -= shoe.move_speed
-    for student in students:
-        student.velocity_draw_x -= student.move_speed
-    for wall in walls:
-        wall.velocity_x -= wall.move_speed
-    #for resident in residents:
-    #    resident.x -= penguin.move_speed
+    if not collide_x_character_wall(penguin, walls):
+        for shoe in shoes:
+            shoe.velocity_x -= shoe.move_speed
+        for student in students:
+            student.velocity_x -= student.move_speed
+        for wall in walls:
+            wall.velocity_x -= wall.move_speed
+        #for resident in residents:
+        #    resident.x -= penguin.move_speed
+    else:
+        penguin.velocity_x -= penguin.move_speed
 
 
 
 def count_y_increase():
 
     penguin.velocity_y += penguin.move_speed
-    for shoe in shoes:
-        shoe.velocity_y -= shoe.move_speed
-    for student in students:
-        student.velocity_draw_y -= student.move_speed
-    for wall in walls:
-        wall.velocity_y -= wall.move_speed
-    #for resident in residents:
-    #   resident.y -= penguin.move_speed
+    if not collide_y_character_wall(penguin, walls):
+        for shoe in shoes:
+            shoe.velocity_y -= shoe.move_speed
+        for student in students:
+            student.velocity_y -= student.move_speed
+        for wall in walls:
+            wall.velocity_y -= wall.move_speed
+        #for resident in residents:
+        #   resident.y -= penguin.move_speed
+    else:
+        penguin.velocity_y -= penguin.move_speed
 
 
 def count_x_decrease():
 
     penguin.velocity_x -= penguin.move_speed
-    for shoe in shoes:
-        shoe.velocity_x += shoe.move_speed
-    for student in students:
-        student.velocity_draw_x += student.move_speed
-    for wall in walls:
-        wall.velocity_x += wall.move_speed
-    #for resident in residents:
-    #       resident.x += penguin.move_speed
-
+    if not collide_x_character_wall(penguin, walls):
+        for shoe in shoes:
+            shoe.velocity_x += shoe.move_speed
+        for student in students:
+            student.velocity_x += student.move_speed
+        for wall in walls:
+            wall.velocity_x += wall.move_speed
+        #for resident in residents:
+        #       resident.x += penguin.move_speed
+    else:
+        penguin.velocity_x += penguin.move_speed
 
 def count_y_decrease():
 
    penguin.velocity_y -= penguin.move_speed
-   for shoe in shoes:
-       shoe.velocity_y += shoe.move_speed
-   for student in students:
-       student.velocity_draw_y += student.move_speed
-   for wall in walls:
-       wall.velocity_y += wall.move_speed
-   #for resident in residents:
-   #    resident.y += penguin.move_speed
+   if not collide_y_character_wall(penguin, walls):
+       for shoe in shoes:
+           shoe.velocity_y += shoe.move_speed
+       for student in students:
+           student.velocity_y += student.move_speed
+       for wall in walls:
+           wall.velocity_y += wall.move_speed
+       #for resident in residents:
+       #    resident.y += penguin.move_speed
+   else:
+       penguin.velocity_y += penguin.move_speed
