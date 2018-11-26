@@ -71,6 +71,7 @@ class WalkingState:
             penguin.y_velocity += RUN_SPEED_PPS
             penguin.direction[2] = False
 
+        if event ==
 
     @staticmethod
     def exit(penguin, event):
@@ -187,7 +188,7 @@ class Penguin:
 
     def set_background(self, bg):
         self.bg = bg
-        self.x = self.bg.w / 2
+        self.x = self.bg.w * 4 / 5
         self.y = self.bg.h / 2
 
     def add_event(self, event):
