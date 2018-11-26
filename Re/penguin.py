@@ -120,6 +120,8 @@ class WalkingState:
         for wall in main_state.walls:
             wall.cx, wall.cy = cx, cy
 
+        main_state.zombies.cx, main_state.zombies.cy = cx, cy
+
         penguin.x = clamp(0, penguin.x, penguin.bg.w)
         penguin.y = clamp(0, penguin.y, penguin.bg.h)
 
@@ -161,6 +163,7 @@ class Penguin:
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.direction = [False, False, False, False]
+        #self.x , self.y = 0, 0
         self.x_velocity, self.y_velocity = 0, 0
         self.frame = 0
         self.direct_frame = 0
@@ -212,7 +215,7 @@ class Penguin:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%4d, %4d)' % (self.x, self.y), (255, 255, 0))
+        self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20, self.canvas_height//2 + 70, '[%3d]' % self.ball_count, (0, 0, 0))
 
 

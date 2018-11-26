@@ -11,6 +11,7 @@ from life import Life
 from wall import Wall
 from background import FixedBackground as Background
 from map import Map
+from zombie import Zombie
 #from background import InfiniteBackground as Background
 
 name = "MainState"
@@ -20,6 +21,10 @@ background = None
 lifes = []
 walls = []
 map = None
+zombies = None
+
+def get_penguin():
+    return penguin
 
 def collide(a, b):
     # fill here
@@ -58,6 +63,10 @@ def enter():
     global penguin
     penguin = Penguin()
     game_world.add_object(penguin, 1)
+
+    global zombies
+    zombies = Zombie()
+    game_world.add_object(zombies, 1)
 
     global background
     background = Background()
