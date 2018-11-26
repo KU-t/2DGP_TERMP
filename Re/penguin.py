@@ -45,6 +45,7 @@ class WalkingState:
         if event == RIGHTKEY_DOWN:
             penguin.x_velocity += RUN_SPEED_PPS
             penguin.direction[3] = True
+
         elif event == RIGHTKEY_UP:
             penguin.x_velocity -= RUN_SPEED_PPS
             penguin.direction[3] = False
@@ -80,9 +81,25 @@ class WalkingState:
     def do(penguin):
         penguin.frame = (penguin.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
+        #x축 충돌체크
+        collision_x = False
+        for wall in main_state.walls:
+            if main_state.collide_x_wall(penguin, wall):
+                collision_x = True
+                #penguin.y -= penguin.y_velocity * game_framework.frame_time
+        if not collision_x:
+            penguin.x += penguin.x_velocity * game_framework.frame_time
 
-        penguin.x += penguin.x_velocity * game_framework.frame_time
-        penguin.y += penguin.y_velocity * game_framework.frame_time
+
+        #y축 충돌체크
+        collision_y = False
+        for wall in main_state.walls:
+            if main_state.collide_y_wall(penguin, wall):
+                collision_y = True
+                #penguin.x -= penguin.x_velocity * game_framework.frame_time
+        if not collision_y:
+            penguin.y += penguin.y_velocity * game_framework.frame_time
+
 
         cx, cy = penguin.x - penguin.bg.window_left, penguin.y - penguin.bg.window_bottom
 
@@ -116,6 +133,7 @@ class WalkingState:
             penguin.image.clip_draw(int(penguin.frame) * 35, penguin.direct_frame * 47 + 35, 35, 45, penguin.cx, penguin.cy)
 
         draw_rectangle(*penguin.get_bb())
+        #draw_rectangle(*penguin.get_collision_bb())
 
 next_state_table = {
     WalkingState: {RIGHTKEY_UP: WalkingState, LEFTKEY_UP: WalkingState, RIGHTKEY_DOWN: WalkingState, LEFTKEY_DOWN: WalkingState,
@@ -149,6 +167,18 @@ class Penguin:
 
     def get_bb(self):
         return self.cx - 10, self.cy - 20, self.cx + 10, self.cy + 10
+
+    def get_collision_x_bb(self):
+        x = self.x + self.x_velocity * game_framework.frame_time
+
+        cx = x - self.bg.window_left
+        return cx - 10, self.cy - 20, cx + 10, self.cy + 10
+
+    def get_collision_y_bb(self):
+        y = self.y + self.y_velocity * game_framework.frame_time
+
+        cy = y - self.bg.window_bottom
+        return self.cx - 10, cy - 20, self.cx + 10, cy + 10
 
     def eat(self, ball):
         self.eat_sound.play()

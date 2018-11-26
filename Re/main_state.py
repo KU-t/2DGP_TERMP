@@ -30,9 +30,20 @@ def collide(a, b):
     if bottom_a > top_b : return False
     return True
 
-def collide_wall(a, wall):
+def collide_x_wall(a, wall):
     # fill here
-    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_a, bottom_a, right_a, top_a = a.get_collision_x_bb()
+    left_b, bottom_b, right_b, top_b = wall.get_bb()
+
+    if left_a > right_b : return False
+    if right_a < left_b : return False
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
+
+def collide_y_wall(a, wall):
+    # fill here
+    left_a, bottom_a, right_a, top_a = a.get_collision_y_bb()
     left_b, bottom_b, right_b, top_b = wall.get_bb()
 
     if left_a > right_b : return False
