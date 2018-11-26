@@ -10,6 +10,7 @@ from penguin import Penguin
 from life import Life
 from wall import Wall
 from background import FixedBackground as Background
+from map import Map
 #from background import InfiniteBackground as Background
 
 name = "MainState"
@@ -18,6 +19,7 @@ penguin = None
 background = None
 lifes = []
 walls = []
+map = None
 
 def collide(a, b):
     # fill here
@@ -91,6 +93,10 @@ def enter():
     walls += [Wall(1400, 300, 1400, 500), Wall(1400, 600, 1400, 900)]
     walls += [Wall(1200, 500, 1200, 700)]
     game_world.add_objects(walls, 0)
+
+    global map
+    map = Map()
+    game_world.add_object(map, 1)
 
     background.set_center_object(penguin)
     penguin.set_background(background)

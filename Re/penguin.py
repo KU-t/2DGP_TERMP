@@ -20,7 +20,7 @@ FRAMES_PER_ACTION = 8
 
 
 # Penguin Event
-RIGHTKEY_DOWN, LEFTKEY_DOWN, UPKEY_DOWN, DOWNKEY_DOWN, RIGHTKEY_UP, LEFTKEY_UP, UPKEY_UP, DOWNKEY_UP, SPACE = range(9)
+RIGHTKEY_DOWN, LEFTKEY_DOWN, UPKEY_DOWN, DOWNKEY_DOWN, RIGHTKEY_UP, LEFTKEY_UP, UPKEY_UP, DOWNKEY_UP, UPKEY_M, DOWNKEY_M = range(10)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHTKEY_DOWN,
@@ -31,7 +31,8 @@ key_event_table = {
     (SDL_KEYUP, SDLK_LEFT): LEFTKEY_UP,
     (SDL_KEYUP, SDLK_UP): UPKEY_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWNKEY_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE
+    (SDL_KEYUP, SDLK_m): UPKEY_M,
+    (SDL_KEYDOWN, SDLK_m): DOWNKEY_M
 }
 
 
@@ -71,12 +72,19 @@ class WalkingState:
             penguin.y_velocity += RUN_SPEED_PPS
             penguin.direction[2] = False
 
-        if event ==
+        if event == DOWNKEY_M:
+            if main_state.map.show:
+                main_state.map.show = False
+            elif not main_state.map.show:
+                main_state.map.show = True
+        elif event == UPKEY_M:
+            pass
 
     @staticmethod
     def exit(penguin, event):
-        if event == SPACE:
-            penguin.fire_ball()
+        pass
+        #if event == SPACE:
+        #    penguin.fire_ball()
 
     @staticmethod
     def do(penguin):
@@ -139,7 +147,7 @@ class WalkingState:
 next_state_table = {
     WalkingState: {RIGHTKEY_UP: WalkingState, LEFTKEY_UP: WalkingState, RIGHTKEY_DOWN: WalkingState, LEFTKEY_DOWN: WalkingState,
                 UPKEY_UP: WalkingState, UPKEY_DOWN: WalkingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
-                SPACE: WalkingState}
+                UPKEY_M: WalkingState, DOWNKEY_M: WalkingState}
 }
 
 
