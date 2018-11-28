@@ -1,15 +1,21 @@
 import game_framework
 from pico2d import *
 import main_state
+import random
 
-name = "EndState"
+name = "Victory"
 image = None
 
+from penguin import Penguin
+
+penguins = []
 
 def enter():
     global image
     image = load_image('./image/victory.png')
 
+    global penguins
+    penguins += [Penguin(random.randint(0, 800), random.randint(230, 270)) for i in range(0, 5)]
 
 def exit():
     global image
@@ -30,6 +36,13 @@ def handle_events():
 def draw():
     clear_canvas()
     image.draw(400, 300)
+    for penguin in penguins:
+        penguin.frame = (penguin.frame + 1) % 150
+        penguin.x = (penguin.x - (random.randint(0, 100) / 100))
+        if penguin.x <= - 20:
+            penguin.x = 820
+            penguin.y = random.randint(230, 270)
+        penguin.draw_victory()
     update_canvas()
 
 
@@ -40,6 +53,10 @@ def draw():
 
 def update():
     pass
+    global penguins
+
+    #for penguin in penguins:
+
 
 
 def pause():

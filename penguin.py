@@ -151,19 +151,25 @@ next_state_table = {
 
 
 class Penguin:
+    image = None
+    image_count_1 = None
+    image_count_2 = None
+    image_count_3 = None
 
-    def __init__(self):
+    def __init__(self, x = 400, y = 300):
+        if Penguin.image_count_1 == None:
+            Penguin.image = load_image('./image/penguin.png')
+            Penguin.image_count_1 = load_image('./image/1.jpg')
+            Penguin.image_count_2 = load_image('./image/2.jpg')
+            Penguin.image_count_3 = load_image('./image/3.jpg')
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         # Penguin is only once created, so instance image loading is fine
-        self.image = load_image('./image/penguin.png')
-        self.image_count_1 = load_image('./image/1.jpg')
-        self.image_count_2 = load_image('./image/2.jpg')
-        self.image_count_3 = load_image('./image/3.jpg')
+
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.direction = [False, False, False, False]
-        #self.x , self.y = 0, 0
+        self.x, self.y = x, y
         self.x_velocity, self.y_velocity = 0, 0
         self.frame = 0
         self.direct_frame = 0
@@ -231,6 +237,9 @@ class Penguin:
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.skill_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 130 , 'time[%3d]' % self.time_life, (0, 0, 0))
 
+    def draw_victory(self):
+        self.image.clip_draw((self.frame // 50) * 38 + 323, 5 * 47 + 35, 38, 45, self.x, self.y)
+        self.font.draw(self.x - 40, self.y + 30, 'Thanks!', (100, 100, 255))
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:

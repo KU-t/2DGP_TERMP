@@ -1,7 +1,7 @@
 import game_framework
 from pico2d import *
 import main_state
-
+import victory_state
 name = "TitleState"
 image = None
 
