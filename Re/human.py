@@ -21,14 +21,14 @@ FRAMES_PER_ACTION = 10
 animation_names = ['Attack', 'Dead', 'Idle', 'Walk']
 
 
-class Zombie:
+class Human:
     images = None
 
     def load_images(self):
-        if Zombie.images == None:
-            Zombie.images = {}
+        if Human.images == None:
+            Human.images = {}
             for name in animation_names:
-                Zombie.images[name] = [load_image("./zombiefiles/female/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Human.images[name] = [load_image("./zombiefiles/female/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
 
 
     def __init__(self, x, y):
@@ -43,8 +43,11 @@ class Zombie:
         self.build_behavior_tree()
 
     def wander(self):
-        # fill here
-        pass
+        self.speed = RUN_SPEED_PPS
+        self.timer -= game_framework.frame_time
+        if self.timer < 0:
+            self.timer += 1.0
+            self.dir = random.random() * 2 * math.pi
 
     def find_player(self):
         penguin = main_state.get_penguin()
@@ -121,14 +124,14 @@ class Zombie:
 
         if math.cos(self.dir) < 0:
             if self.speed == 0:
-                Zombie.images['Idle'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
+                Human.images['Idle'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
             else:
-                Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
+                Human.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
         else:
             if self.speed == 0:
-                Zombie.images['Idle'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
+                Human.images['Idle'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
             else:
-                Zombie.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
+                Human.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
         draw_rectangle(*self.get_bb())
         draw_rectangle(*self.get_collision_x_bb())
         draw_rectangle(*self.get_collision_y_bb())

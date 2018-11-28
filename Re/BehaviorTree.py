@@ -69,15 +69,14 @@ class SequenceNode(Node):
     def run(self):
         for pos in range(self.prev_running_pos, len(self.children)):
             result = self.children[pos].run()
-
             if BehaviorTree.RUNNING == result:
                 self.prev_running_pos = pos
                 return BehaviorTree.RUNNING
-            elif BehaviorTree.SUCCESS == result:
+            elif BehaviorTree.FAIL == result:
                 self.prev_running_pos = 0
-                return BehaviorTree.SUCCESS
+                return BehaviorTree.FAIL
         self.prev_running_pos = 0
-        return BehaviorTree.FAIL
+        return BehaviorTree.SUCCESS
 
     def print(self):
         print_indent()

@@ -11,7 +11,7 @@ from life import Life
 from wall import Wall
 from background import FixedBackground as Background
 from map import Map
-from zombie import Zombie
+from human import Human
 #from background import InfiniteBackground as Background
 
 name = "MainState"
@@ -64,11 +64,11 @@ def enter():
     penguin = Penguin()
     game_world.add_object(penguin, 1)
 
-    with open('zombie_data.json', 'r') as f:
-        zombie_data_list = json.load(f)
-    for data in zombie_data_list:
-        zombie = Zombie(data['x'], data['y'])
-        game_world.add_object(zombie, 1)
+    with open('human_data.json', 'r') as f:
+        human_data_list = json.load(f)
+    for data in human_data_list:
+        human = Human(data['x'], data['y'])
+        game_world.add_object(human, 1)
 
     global background
     background = Background()
