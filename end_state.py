@@ -8,7 +8,7 @@ image = None
 
 def enter():
     global image
-    image = load_image('kpu_credit.png')
+    image = load_image('./image/end.png')
 
 
 def exit():

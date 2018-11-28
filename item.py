@@ -9,9 +9,9 @@ class Item:
 
     def __init__(self, x, y, type = 'life'):
         if Item.image_life == None:
-            Item.image_life = load_image('life.jpg')
-            Item.image_card = load_image('card.jpg')
-            Item.image_skill = load_image('skill.jpg')
+            Item.image_life = load_image('./image/life.jpg')
+            Item.image_card = load_image('./image/card.jpg')
+            Item.image_skill = load_image('./image/skill.jpg')
 
         self.type = type
         self.x, self.y = x, y

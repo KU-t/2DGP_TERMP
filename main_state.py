@@ -1,22 +1,32 @@
 import random
+import json
+import os
+
 from pico2d import *
 import game_framework
 import game_world
+import end_state
+import victory_state
 
 from penguin import Penguin
-from human import Human
-from tip import Tip
-from life import Life
-from shoe import Shoe
+from item import Item
 from wall import Wall
+from background import FixedBackground as Background
+from map import Map
+from human import Human
+#from background import InfiniteBackground as Background
+
 name = "MainState"
 
 penguin = None
-students = []
-tip = None
-life = None
-shoes = []
+background = None
+items = []
 walls = []
+map = None
+
+
+def get_penguin():
+    return penguin
 
 def collide(a, b):
     # fill here
@@ -29,89 +39,86 @@ def collide(a, b):
     if bottom_a > top_b : return False
     return True
 
-def collide_x_character_wall(character, Walls):
-    left_a, bottom_a, right_a, top_a = character.get_bb_collision_x_wall()
+def collide_x_wall(a, wall):
+    # fill here
+    left_a, bottom_a, right_a, top_a = a.get_collision_x_bb()
+    left_b, bottom_b, right_b, top_b = wall.get_bb()
 
-    for wall in Walls:
-        left_b, bottom_b, right_b, top_b = wall.get_bb()
+    if left_a > right_b : return False
+    if right_a < left_b : return False
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
 
-        if bottom_b <= top_a and bottom_a <= top_b:
-            if left_b <= left_a and left_a <= right_b:
-                return True
-            if left_b <= right_a and right_a <= right_b:
-                return True
+def collide_y_wall(a, wall):
+    # fill here
+    left_a, bottom_a, right_a, top_a = a.get_collision_y_bb()
+    left_b, bottom_b, right_b, top_b = wall.get_bb()
 
-    return False
-
-def collide_y_character_wall(character, Walls):
-    left_a, bottom_a, right_a, top_a = character.get_bb_collision_y_wall()
-
-    for wall in Walls:
-        left_b, bottom_b, right_b, top_b = wall.get_bb()
-
-        if left_b <= right_a and left_a <= right_b:
-            if bottom_b <= bottom_a and bottom_a <= top_b:
-                return True
-
-            if bottom_b <= top_a and top_a <= top_b:
-                return True
-
-    return False
+    if left_a > right_b : return False
+    if right_a < left_b : return False
+    if top_a < bottom_b : return False
+    if bottom_a > top_b : return False
+    return True
 
 def enter():
-
-    global students
-    students = [Human(400, 300, random.randint(0, 4)) for i in range(10)]
-    for student in students:
-        game_world.add_object(student, 1)
-
     global penguin
     penguin = Penguin()
     game_world.add_object(penguin, 1)
 
-    global tip
-    tip = Tip()
-    game_world.add_object(tip, 0)
+    with open('human_data.json', 'r') as f:
+        human_data_list = json.load(f)
+    for data in human_data_list:
+        human = Human(data['x'], data['y'])
+        game_world.add_object(human, 1)
 
-    global life
-    life = Life()
-    game_world.add_object(life, 1)
+    global background
+    background = Background()
+    game_world.add_object(background, 0)
 
-    global shoes
-    shoes = [Shoe(i * 50 - 800, i * 100) for i in range(10)]
-    for shoe in shoes:
-        game_world.add_object(shoe, 0)
+    global items
+    items = [Item(random.randint(0, 1800), random.randint(0, 1100)) for i in range(100)]
+    game_world.add_objects(items, 0)
+
+    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'card') for i in range(10)]
+    game_world.add_objects(items, 0)
+
+    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'shoes') for i in range(10)]
+    game_world.add_objects(items, 0)
 
     global walls
-    #세로 벽
-    walls = [Wall((i + 1) * 200 - 800 - 40, -300 + 5, (i + 1) * 200 - 800 - 40, -150 - 5) for i in range(7)]
-    walls += [Wall((i + 1) * 200 - 800 - 40, 0 + 5, (i + 1) * 200 - 800 - 40, 150 - 5) for i in range(5)]
-    walls += [Wall((i + 1) * 200 - 800 - 40, 450 + 5, (i + 1) * 200 - 800 - 40, 600 - 5) for i in range(5)]
-    walls += [Wall((i + 1) * 200 - 800 - 40, 750 + 5, (i + 1) * 200 - 800 - 40, 900 - 5) for i in range(7)]
-    walls += [Wall(0 - 800 - 40, -300, 0 - 800 - 40, 900), Wall(1600 - 800 - 40, -300, 1600 - 800- 40, 900)]
+    # 세로 벽
+    walls = [Wall((i + 1) * 200, 0, (i + 1) * 200, 150) for i in range(7)]
+    walls += [Wall((i + 1) * 200, 300, (i + 1) * 200, 450) for i in range(5)]
+    walls += [Wall((i + 1) * 200, 750, (i + 1) * 200, 900) for i in range(5)]
+    walls += [Wall((i + 1) * 200, 1050, (i + 1) * 200, 1200) for i in range(7)]
+    walls += [Wall(0, 0, 0, 1200), Wall(1600, 0, 1600, 1200)]
 
-    #가로 벽
-    walls += [Wall(0 + 5 - 800 - 40, - 300 + i * 150, 1600 - 5 - 800 - 40, -300 + i * 150) for i in range(9) if i == 0 or i == 8]
-    walls += [Wall(0 + 5 - 800 - 40, - 300 + i * 150, 1200 - 800 - 40, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
-    walls += [Wall(1400 - 800 - 40, - 300 + i * 150, 1600 + 5 - 800 - 40, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+    # 가로 벽
+    walls += [Wall(0, i * 150, 1600, i * 150) for i in range(9) if i == 0 or i == 8]
+    walls += [Wall(0, i * 150, 1200, i * 150) for i in range(9) if i == 3 or i == 5]
+    walls += [Wall(1400, i * 150, 1600, i * 150) for i in range(9) if i == 3 or i == 5]
 
-    #입구 벽
-    walls += [Wall(-100 + 400 * i + 5 - 800 - 40, - 300 + 150, 100 + 400 * i - 5 - 800 - 40, -300 + 150) for i in range(5)]
-    walls += [Wall(-100 + 400 * i + 5 - 800 - 40, - 300 + 300, 100 + 400 * i - 5 - 800 - 40, -300 + 300) for i in range(5) if not i == 3]
-    walls += [Wall(-100 + 400 * 3 + 5 - 800 - 40, - 300 + 300, 100 + 400 * 3 - 100 - 800 - 40, -300 + 300)]
-    walls += [Wall(-100 + 400 * i + 5 - 800 - 40, - 300 + 900, 100 + 400 * i - 5 - 800 - 40, -300 + 900) for i in range(5) if not i == 3]
-    walls += [Wall(-100 + 400 * 3 + 5 - 800 - 40, -300 + 900, 100 + 400 * 3 - 100 - 800 - 40, -300 + 900)]
-    walls += [Wall(-100 + 400 * i + 5 - 800 - 40, -300 + 1050, 100 + 400 * i - 5 - 800 - 40, -300 + 1050) for i in range(5)]
+    # 입구 벽
+    walls += [Wall(-100 + 400 * i, 150, 100 + 400 * i, 150) for i in range(5)]
+    walls += [Wall(-100 + 400 * i, 300, 100 + 400 * i, 300) for i in range(5) if not i == 3]
+    walls += [Wall(-100 + 400 * 3, 300, 100 + 400 * 3 - 100, 300)]
+    walls += [Wall(-100 + 400 * i, 900, 100 + 400 * i, 900) for i in range(5) if not i == 3]
+    walls += [Wall(-100 + 400 * 3, 900, 100 + 400 * 3 - 100, 900)]
+    walls += [Wall(-100 + 400 * i, 1050, 100 + 400 * i, 1050) for i in range(5)]
 
-    #입구 & 휴게실 & 중앙문
-    walls += [Wall(1200 - 800 - 40, 0, 1200 - 800 - 40, 200), Wall(1200 - 800 - 40, 400, 1200 - 800 - 40, 600)]
-    walls += [Wall(1400 - 800 - 40, 0, 1400 - 800 - 40, 200), Wall(1400 - 800 - 40, 300, 1400 - 800 - 40, 600)]
-    walls += [Wall(1200 - 800 - 40, 200, 1200 - 800 - 40, 400)]
-    #walls += [Wall(0 + 5, - 300 + i * 150, 1200, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
-    #walls += [Wall(1400, - 300 + i * 150, 1600 + 5, -300 + i * 150) for i in range(9) if i == 3 or i == 5]
+    # 입구 & 휴게실 & 중앙문
+    walls += [Wall(1200, 300, 1200, 500), Wall(1200, 700, 1200, 900)]
+    walls += [Wall(1400, 300, 1400, 500), Wall(1400, 600, 1400, 900)]
+    walls += [Wall(1200, 500, 1200, 700, True)]
+    game_world.add_objects(walls, 0)
 
-    for wall in walls:
-        game_world.add_object(wall, 0)
+    global map
+    map = Map()
+    game_world.add_object(map, 1)
+
+    background.set_center_object(penguin)
+    penguin.set_background(background)
 
 
 def exit():
@@ -132,50 +139,35 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            penguin.direction[0] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            penguin.direction[1] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-            penguin.direction[2] = True
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            penguin.direction[3] = True
+        else:
+            penguin.handle_event(event)
 
-        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
-            penguin.direction[0] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
-            penguin.direction[1] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
-            penguin.direction[2] = False
-        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
-            penguin.direction[3] = False
 
 def update():
-
-
     for game_object in game_world.all_objects():
         game_object.update()
+    for item in items:
+        if item.exist:
+            if collide(penguin, item):
+                penguin.eat(item)
 
-    update_obj()
+    for game_object in game_world.all_objects():
+        if isinstance(game_object, Human):
+            if collide(penguin, game_object):
+                if penguin.time_life == 0:
+                    penguin.time_life = 300
+                    penguin.life_count -= 1
+                    if penguin.life_count == 0:
+                        game_framework.change_state(end_state)
 
-    for student in students:
-        if collide(penguin, student):
-            if penguin.time_life == 0:
-                penguin.time_life = 300
-                life.life -= 1
-        if (penguin.x - student.x)**2 + (penguin.y - student.y)**2 <= 20000:
-            student.state = 'follow'
-        else:
-            student.state = 'move'
-
-    for shoe in shoes:
-        if collide(penguin, shoe):
-            penguin.item += 1
-            life.life += 1
-            shoe.exist = False
-            shoes.remove(shoe)
-            game_world.remove_object(shoes)
-
+    if penguin.card_count >= 3:
+        for game_object in game_world.all_objects():
+            if isinstance(game_object, Wall):
+                if game_object.door:
+                    game_object.open = True
+    if penguin.x <= 800:
+        if 450 <= penguin.y and penguin.y <= 750:
+            game_framework.change_state(victory_state)
 
 def draw():
     clear_canvas()
@@ -184,116 +176,7 @@ def draw():
     update_canvas()
 
 
-def move_obj():
-    if penguin.direction[0] == True:
-        if penguin.direction[1] == True:
-            count_x_decrease()
-            count_y_increase()
-            penguin.direct_frame = 4
-
-        elif penguin.direction[2] == True:
-            pass
-
-        elif penguin.direction[3] == True:
-            count_x_increase()
-            count_y_increase()
-            penguin.direct_frame = 2
-
-        else:
-            count_y_increase()
-            penguin.direct_frame = 3
-
-
-    elif penguin.direction[1] == True:
-        if penguin.direction[2] == True:
-            count_x_decrease()
-            count_y_decrease()
-            penguin.direct_frame = 6
-
-        elif penguin.direction[3] == True:
-            pass
-
-        else:
-            count_x_decrease()
-            penguin.direct_frame = 5
-
-    elif penguin.direction[2] == True:
-        if penguin.direction[3] == True:
-            count_x_increase()
-            count_y_decrease()
-            penguin.direct_frame = 0
-
-        else:
-            count_y_decrease()
-            penguin.direct_frame = 7
-
-    elif penguin.direction[3] == True:
-        count_x_increase()
-        penguin.direct_frame = 1
-
-
-def update_obj():
-    move_obj()
-
-def count_x_increase():
-
-    penguin.velocity_x += penguin.move_speed
-    if not collide_x_character_wall(penguin, walls):
-        for shoe in shoes:
-            shoe.velocity_x -= shoe.move_speed
-        for student in students:
-            student.velocity_x -= student.move_speed
-        for wall in walls:
-            wall.velocity_x -= wall.move_speed
-        #for resident in residents:
-        #    resident.x -= penguin.move_speed
-    else:
-        penguin.velocity_x -= penguin.move_speed
 
 
 
-def count_y_increase():
 
-    penguin.velocity_y += penguin.move_speed
-    if not collide_y_character_wall(penguin, walls):
-        for shoe in shoes:
-            shoe.velocity_y -= shoe.move_speed
-        for student in students:
-            student.velocity_y -= student.move_speed
-        for wall in walls:
-            wall.velocity_y -= wall.move_speed
-        #for resident in residents:
-        #   resident.y -= penguin.move_speed
-    else:
-        penguin.velocity_y -= penguin.move_speed
-
-
-def count_x_decrease():
-
-    penguin.velocity_x -= penguin.move_speed
-    if not collide_x_character_wall(penguin, walls):
-        for shoe in shoes:
-            shoe.velocity_x += shoe.move_speed
-        for student in students:
-            student.velocity_x += student.move_speed
-        for wall in walls:
-            wall.velocity_x += wall.move_speed
-        #for resident in residents:
-        #       resident.x += penguin.move_speed
-    else:
-        penguin.velocity_x += penguin.move_speed
-
-def count_y_decrease():
-
-   penguin.velocity_y -= penguin.move_speed
-   if not collide_y_character_wall(penguin, walls):
-       for shoe in shoes:
-           shoe.velocity_y += shoe.move_speed
-       for student in students:
-           student.velocity_y += student.move_speed
-       for wall in walls:
-           wall.velocity_y += wall.move_speed
-       #for resident in residents:
-       #    resident.y += penguin.move_speed
-   else:
-       penguin.velocity_y += penguin.move_speed

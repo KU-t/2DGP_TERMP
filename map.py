@@ -6,7 +6,7 @@ from pico2d import *
 class Map:
 
     def __init__(self):
-        self.image = load_image('background.png')
+        self.image = load_image('./image/background.png')
         self.show = False
 
     def draw(self):
