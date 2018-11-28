@@ -28,7 +28,7 @@ class Item:
                 self.image_life.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
             if self.type == 'card':
                 self.image_card.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
-            if self.type == 'shoes':
+            if self.type == 'skill':
                 self.image_skill.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
 
     def draw_move(self):

@@ -66,7 +66,7 @@ def enter():
     penguin = Penguin()
     game_world.add_object(penguin, 1)
 
-    with open('human_data.json', 'r') as f:
+    with open('./data/human_data.json', 'r') as f:
         human_data_list = json.load(f)
     for data in human_data_list:
         human = Human(data['x'], data['y'])
@@ -77,14 +77,14 @@ def enter():
     game_world.add_object(background, 0)
 
     global items
-    items = [Item(random.randint(0, 1800), random.randint(0, 1100)) for i in range(100)]
-    game_world.add_objects(items, 0)
 
-    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'card') for i in range(10)]
-    game_world.add_objects(items, 0)
+    with open('./data/item_data.json', 'r') as f:
+        item_data_list = json.load(f)
+    for data in item_data_list:
+        item = Item(data['x'], data['y'], data['type'])
+        game_world.add_object(item, 1)
 
-    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'shoes') for i in range(10)]
-    game_world.add_objects(items, 0)
+
 
     global walls
     # 세로 벽
@@ -146,10 +146,12 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-    for item in items:
-        if item.exist:
-            if collide(penguin, item):
-                penguin.eat(item)
+
+    for game_object in game_world.all_objects():
+        if isinstance(game_object, Item):
+            if game_object.exist:
+                if collide(penguin, game_object):
+                    penguin.eat(game_object)
 
     for game_object in game_world.all_objects():
         if isinstance(game_object, Human):

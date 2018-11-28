@@ -199,7 +199,7 @@ class Penguin:
             self.life_count += 1
         if item.type == 'card':
             self.card_count += 1
-        if item.type == 'shoes':
+        if item.type == 'skill':
             self.skill_count += 1
             self.time_life = 300
         item.exist = False
