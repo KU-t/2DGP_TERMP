@@ -11,7 +11,7 @@ class Item:
         if Item.image_life == None:
             Item.image_life = load_image('life.jpg')
             Item.image_card = load_image('card.jpg')
-            Item.image_shoes = load_image('shoes.jpg')
+            Item.image_skill = load_image('skill.jpg')
 
         self.type = type
         self.x, self.y = x, y
@@ -29,7 +29,7 @@ class Item:
             if self.type == 'card':
                 self.image_card.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
             if self.type == 'shoes':
-                self.image_shoes.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
+                self.image_skill.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
 
     def draw_move(self):
         pass

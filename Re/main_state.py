@@ -5,6 +5,8 @@ import os
 from pico2d import *
 import game_framework
 import game_world
+import end_state
+import victory_state
 
 from penguin import Penguin
 from item import Item
@@ -153,14 +155,19 @@ def update():
         if isinstance(game_object, Human):
             if collide(penguin, game_object):
                 if penguin.time_life == 0:
-                   penguin.time_life = 300
-                   penguin.life_count -= 1
+                    penguin.time_life = 300
+                    penguin.life_count -= 1
+                    if penguin.life_count == 0:
+                        game_framework.change_state(end_state)
 
     if penguin.card_count >= 3:
         for game_object in game_world.all_objects():
             if isinstance(game_object, Wall):
                 if game_object.door:
                     game_object.open = True
+    if penguin.x <= 800:
+        if 450 <= penguin.y and penguin.y <= 750:
+            game_framework.change_state(victory_state)
 
 def draw():
     clear_canvas()

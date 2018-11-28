@@ -95,7 +95,6 @@ class WalkingState:
         for wall in main_state.walls:
             if main_state.collide_x_wall(penguin, wall):
                 collision_x = True
-                #penguin.y -= penguin.y_velocity * game_framework.frame_time
         if not collision_x:
             penguin.x += penguin.x_velocity * game_framework.frame_time
 
@@ -105,24 +104,13 @@ class WalkingState:
         for wall in main_state.walls:
             if main_state.collide_y_wall(penguin, wall):
                 collision_y = True
-                #penguin.x -= penguin.x_velocity * game_framework.frame_time
         if not collision_y:
             penguin.y += penguin.y_velocity * game_framework.frame_time
 
-
         cx, cy = penguin.x - penguin.bg.window_left, penguin.y - penguin.bg.window_bottom
-
-        #penguin.cx, penguin.cy = cx, cy
-
-#        for life in main_state.lifes:
- #           life.cx, life.cy = cx, cy
-
-  #      for wall in main_state.walls:
-   #         wall.cx, wall.cy = cx, cy
 
         for game_object in game_world.all_objects():
             game_object.cx, game_object.cy = cx, cy
-
 
         penguin.x = clamp(0, penguin.x, penguin.bg.w)
         penguin.y = clamp(0, penguin.y, penguin.bg.h)
@@ -144,6 +132,13 @@ class WalkingState:
             penguin.image.clip_draw(int(penguin.frame) * 35, penguin.direct_frame * 47 + 35, 35, 45, penguin.cx + 5, penguin.cy - 4)
         else:
             penguin.image.clip_draw(int(penguin.frame) * 35, penguin.direct_frame * 47 + 35, 35, 45, penguin.cx, penguin.cy)
+        if not penguin.time_life == 0:
+            if penguin.time_life // 100 == 2:
+                penguin.image_count_3.draw(penguin.x - main_state.penguin.x + penguin.cx, penguin.y - main_state.penguin.y + penguin.cy + 30)
+            if penguin.time_life // 100 == 1:
+                penguin.image_count_2.draw(penguin.x - main_state.penguin.x + penguin.cx, penguin.y - main_state.penguin.y + penguin.cy + 30)
+            if penguin.time_life // 100 == 0:
+                penguin.image_count_1.draw(penguin.x - main_state.penguin.x + penguin.cx, penguin.y - main_state.penguin.y + penguin.cy + 30)
 
         draw_rectangle(*penguin.get_bb())
         #draw_rectangle(*penguin.get_collision_bb())
@@ -162,6 +157,9 @@ class Penguin:
         self.canvas_height = get_canvas_height()
         # Penguin is only once created, so instance image loading is fine
         self.image = load_image('penguin.png')
+        self.image_count_1 = load_image('1.jpg')
+        self.image_count_2 = load_image('2.jpg')
+        self.image_count_3 = load_image('3.jpg')
         self.font = load_font('ENCR10B.TTF', 16)
         self.dir = 1
         self.direction = [False, False, False, False]
@@ -172,9 +170,9 @@ class Penguin:
         self.event_que = []
         self.cur_state = WalkingState
         self.cur_state.enter(self, None)
-        self.life_count = 0
+        self.life_count = 3
         self.card_count = 0
-        self.shoes_count = 0
+        self.skill_count = 0
         self.cx, self.cy = 0, 0
         self.eat_sound = load_wav('pickup.wav')
         self.eat_sound.set_volume(32)
@@ -202,7 +200,8 @@ class Penguin:
         if item.type == 'card':
             self.card_count += 1
         if item.type == 'shoes':
-            self.shoes_count += 1
+            self.skill_count += 1
+            self.time_life = 300
         item.exist = False
 
     def set_background(self, bg):
@@ -221,7 +220,7 @@ class Penguin:
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
         if self.time_life > 0:
-            self.time_life -= 1
+            self.time_life -= 3
 
 
     def draw(self):
@@ -229,7 +228,7 @@ class Penguin:
         self.font.draw(self.canvas_width//2 - 60 , self.canvas_height//2 + 50 , '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 70 , 'life[%3d]' % self.life_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 90 , 'card[%3d]' % self.card_count, (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.shoes_count, (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.skill_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 130 , 'time[%3d]' % self.time_life, (0, 0, 0))
 
 
