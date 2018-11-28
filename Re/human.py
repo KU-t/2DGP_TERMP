@@ -124,14 +124,16 @@ class Human:
 
         if math.cos(self.dir) < 0:
             if self.speed == 0:
+                pass
                 Human.images['Idle'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
             else:
                 Human.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
         else:
             if self.speed == 0:
+                pass
                 Human.images['Idle'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
             else:
-                Human.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+                Human.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x  + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
         draw_rectangle(*self.get_bb())
         draw_rectangle(*self.get_collision_x_bb())
         draw_rectangle(*self.get_collision_y_bb())

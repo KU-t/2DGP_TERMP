@@ -172,7 +172,9 @@ class Penguin:
         self.event_que = []
         self.cur_state = WalkingState
         self.cur_state.enter(self, None)
-        self.ball_count = 0
+        self.life_count = 0
+        self.card_count = 0
+        self.shoes_count = 0
         self.cx, self.cy = 0, 0
         self.eat_sound = load_wav('pickup.wav')
         self.eat_sound.set_volume(32)
@@ -193,10 +195,15 @@ class Penguin:
         cy = y - self.bg.window_bottom
         return self.cx - 10, cy - 20, self.cx + 10, cy + 10
 
-    def eat(self, ball):
+    def eat(self, item):
         self.eat_sound.play()
-        self.ball_count += 1
-        ball.exist = False
+        if item.type == 'life':
+            self.life_count += 1
+        if item.type == 'card':
+            self.card_count += 1
+        if item.type == 'shoes':
+            self.shoes_count += 1
+        item.exist = False
 
     def set_background(self, bg):
         self.bg = bg
@@ -216,8 +223,10 @@ class Penguin:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.canvas_width//2 - 60, self.canvas_height//2 + 50, '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20, self.canvas_height//2 + 70, '[%3d]' % self.ball_count, (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 60 , self.canvas_height//2 + 50 , '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 70 , 'life[%3d]' % self.life_count, (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 90 , 'card[%3d]' % self.card_count, (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.shoes_count, (0, 0, 0))
 
 
     def handle_event(self, event):

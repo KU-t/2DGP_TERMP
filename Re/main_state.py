@@ -7,7 +7,7 @@ import game_framework
 import game_world
 
 from penguin import Penguin
-from life import Life
+from item import Item
 from wall import Wall
 from background import FixedBackground as Background
 from map import Map
@@ -18,7 +18,7 @@ name = "MainState"
 
 penguin = None
 background = None
-lifes = []
+items = []
 walls = []
 map = None
 
@@ -74,9 +74,15 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
 
-    global lifes
-    lifes = [Life(random.randint(0, 1800), random.randint(0, 1100)) for i in range(100)]
-    game_world.add_objects(lifes, 0)
+    global items
+    items = [Item(random.randint(0, 1800), random.randint(0, 1100)) for i in range(100)]
+    game_world.add_objects(items, 0)
+
+    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'card') for i in range(10)]
+    game_world.add_objects(items, 0)
+
+    items += [Item(random.randint(0, 1800), random.randint(0, 1100), 'shoes') for i in range(10)]
+    game_world.add_objects(items, 0)
 
     global walls
     # 세로 벽
@@ -138,10 +144,10 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-    for life in lifes:
-        if life.exist:
-            if collide(penguin, life):
-                penguin.eat(life)
+    for item in items:
+        if item.exist:
+            if collide(penguin, item):
+                penguin.eat(item)
 
 def draw():
     clear_canvas()
