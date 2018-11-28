@@ -108,7 +108,7 @@ def enter():
     # 입구 & 휴게실 & 중앙문
     walls += [Wall(1200, 300, 1200, 500), Wall(1200, 700, 1200, 900)]
     walls += [Wall(1400, 300, 1400, 500), Wall(1400, 600, 1400, 900)]
-    walls += [Wall(1200, 500, 1200, 700)]
+    walls += [Wall(1200, 500, 1200, 700, True)]
     game_world.add_objects(walls, 0)
 
     global map
@@ -155,6 +155,13 @@ def update():
                 if penguin.time_life == 0:
                    penguin.time_life = 300
                    penguin.life_count -= 1
+
+    if penguin.card_count >= 3:
+        for game_object in game_world.all_objects():
+            if isinstance(game_object, Wall):
+                if game_object.door:
+                    game_object.open = True
+
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():

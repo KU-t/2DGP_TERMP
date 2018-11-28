@@ -223,6 +223,7 @@ class Penguin:
         if self.time_life > 0:
             self.time_life -= 1
 
+
     def draw(self):
         self.cur_state.draw(self)
         self.font.draw(self.canvas_width//2 - 60 , self.canvas_height//2 + 50 , '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
