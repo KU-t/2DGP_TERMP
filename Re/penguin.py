@@ -112,15 +112,17 @@ class WalkingState:
 
         cx, cy = penguin.x - penguin.bg.window_left, penguin.y - penguin.bg.window_bottom
 
-        penguin.cx, penguin.cy = cx, cy
+        #penguin.cx, penguin.cy = cx, cy
 
-        for life in main_state.lifes:
-            life.cx, life.cy = cx, cy
+#        for life in main_state.lifes:
+ #           life.cx, life.cy = cx, cy
 
-        for wall in main_state.walls:
-            wall.cx, wall.cy = cx, cy
+  #      for wall in main_state.walls:
+   #         wall.cx, wall.cy = cx, cy
 
-        main_state.zombies.cx, main_state.zombies.cy = cx, cy
+        for game_object in game_world.all_objects():
+            game_object.cx, game_object.cy = cx, cy
+
 
         penguin.x = clamp(0, penguin.x, penguin.bg.w)
         penguin.y = clamp(0, penguin.y, penguin.bg.h)
@@ -174,7 +176,6 @@ class Penguin:
         self.cx, self.cy = 0, 0
         self.eat_sound = load_wav('pickup.wav')
         self.eat_sound.set_volume(32)
-
 
 
     def get_bb(self):

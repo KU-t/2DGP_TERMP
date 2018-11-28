@@ -29,10 +29,10 @@ class Zombie:
             Zombie.images = {}
             for name in animation_names:
                 Zombie.images[name] = [load_image("./zombiefiles/female/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
-                #draw_rectangle(*self.get_bb())
 
-    def __init__(self):
-        self.x, self.y = 1500, 600
+
+    def __init__(self, x, y):
+        self.x, self.y = x, y
         self.load_images()
         self.dir = random.random()*2*math.pi # random moving direction
         self.speed = 0
@@ -49,7 +49,7 @@ class Zombie:
     def find_player(self):
         penguin = main_state.get_penguin()
         distance = (penguin.x - self.x) ** 2 + (penguin.y - self.y) ** 2
-        if distance < (PIXEL_PER_METER * 10) ** 2:
+        if distance < (PIXEL_PER_METER * 5) ** 2:
             self.dir = math.atan2(penguin.y - self.y, penguin.x - self.x)
             return BehaviorTree.SUCCESS
         else:
@@ -72,29 +72,44 @@ class Zombie:
 
 
     def get_bb(self):
-        #return self.x - main_state.penguin.x + self.cx - 50, self.y - main_state.penguin.y + self.cy - 50, self.x - main_state.penguin.x + self.cx + 50, self.y - main_state.penguin.y + self.cy + 50
-        pass
-    def get_collision_x_bb(self):
-        x = self.x + self.x_velocity * game_framework.frame_time
+        return self.x - main_state.penguin.x + self.cx - 5, self.y - main_state.penguin.y + self.cy - 5, self.x - main_state.penguin.x + self.cx + 5, self.y - main_state.penguin.y + self.cy + 5
 
-        cx = x - main_state.penguin.bg.window_left
-        return cx - 50, self.cy - 50, cx + 50, self.cy + 50
+    def get_collision_x_bb(self):
+        l, b, r, t = self.get_bb()
+        l = l + self.x_velocity * math.cos(self.dir) * game_framework.frame_time
+        r = r + self.x_velocity * math.cos(self.dir) * game_framework.frame_time
+        return l, b, r, t
 
     def get_collision_y_bb(self):
-        y = self.y + self.y_velocity * game_framework.frame_time
-
-        cy = y - main_state.penguin.bg.window_bottom
-        return self.cx - 50, cy - 50, self.cx + 50, cy + 50
+        l, b, r, t = self.get_bb()
+        b = b + self.y_velocity * math.sin(self.dir)* game_framework.frame_time
+        t = t + self.y_velocity * math.sin(self.dir)* game_framework.frame_time
+        return l, b, r, t
 
     def update(self):
         self.bt.run()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
         self.x_velocity, self.y_velocity = self.speed, self.speed
 
+        collision_x = False
+        for wall in main_state.walls:
+            if main_state.collide_x_wall(self, wall):
+                collision_x = True
+                # penguin.y -= penguin.y_velocity * game_framework.frame_time
+        if not collision_x:
+            self.x += self.x_velocity * math.cos(self.dir) * game_framework.frame_time
 
+        # y축 충돌체크
+        collision_y = False
+        for wall in main_state.walls:
+            if main_state.collide_y_wall(self, wall):
+                collision_y = True
+                # penguin.x -= penguin.x_velocity * game_framework.frame_time
+        if not collision_y:
+            self.y += self.y_velocity * math.sin(self.dir) * game_framework.frame_time
 
-        self.x += self.x_velocity * math.cos(self.dir) * game_framework.frame_time
-        self.y += self.y_velocity * math.sin(self.dir) * game_framework.frame_time
+        #self.x += self.x_velocity * math.cos(self.dir) * game_framework.frame_time
+        #self.y += self.y_velocity * math.sin(self.dir) * game_framework.frame_time
         self.x = clamp(0, self.x, main_state.penguin.bg.w)
         self.y = clamp(0, self.y, main_state.penguin.bg.h)
 
@@ -114,6 +129,9 @@ class Zombie:
                 Zombie.images['Idle'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
             else:
                 Zombie.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 100, 100)
+        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_collision_x_bb())
+        draw_rectangle(*self.get_collision_y_bb())
 
     def handle_event(self, event):
         pass

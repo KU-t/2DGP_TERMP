@@ -7,7 +7,7 @@ class Map:
 
     def __init__(self):
         self.image = load_image('background.png')
-        self.show = True
+        self.show = False
 
     def draw(self):
         if self.show:

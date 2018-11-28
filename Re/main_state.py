@@ -21,7 +21,7 @@ background = None
 lifes = []
 walls = []
 map = None
-zombies = None
+
 
 def get_penguin():
     return penguin
@@ -64,9 +64,11 @@ def enter():
     penguin = Penguin()
     game_world.add_object(penguin, 1)
 
-    global zombies
-    zombies = Zombie()
-    game_world.add_object(zombies, 1)
+    with open('zombie_data.json', 'r') as f:
+        zombie_data_list = json.load(f)
+    for data in zombie_data_list:
+        zombie = Zombie(data['x'], data['y'])
+        game_world.add_object(zombie, 1)
 
     global background
     background = Background()
