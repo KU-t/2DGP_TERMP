@@ -178,7 +178,7 @@ class Penguin:
         self.cx, self.cy = 0, 0
         self.eat_sound = load_wav('pickup.wav')
         self.eat_sound.set_volume(32)
-
+        self.time_life = 0
 
     def get_bb(self):
         return self.cx - 10, self.cy - 20, self.cx + 10, self.cy + 10
@@ -220,6 +220,8 @@ class Penguin:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+        if self.time_life > 0:
+            self.time_life -= 1
 
     def draw(self):
         self.cur_state.draw(self)
@@ -227,6 +229,7 @@ class Penguin:
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 70 , 'life[%3d]' % self.life_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 90 , 'card[%3d]' % self.card_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.shoes_count, (0, 0, 0))
+        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 130 , 'time[%3d]' % self.time_life, (0, 0, 0))
 
 
     def handle_event(self, event):

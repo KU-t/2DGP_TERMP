@@ -149,6 +149,12 @@ def update():
             if collide(penguin, item):
                 penguin.eat(item)
 
+    for game_object in game_world.all_objects():
+        if isinstance(game_object, Human):
+            if collide(penguin, game_object):
+                if penguin.time_life == 0:
+                   penguin.time_life = 300
+                   penguin.life_count -= 1
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
