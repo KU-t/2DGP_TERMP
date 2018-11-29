@@ -9,7 +9,7 @@ class Item:
 
     def __init__(self, x, y, type = 'life'):
         if Item.image_life == None:
-            Item.image_life = load_image('./image/life.jpg')
+            Item.image_life = load_image('./image/life.png')
             Item.image_card = load_image('./image/card.jpg')
             Item.image_skill = load_image('./image/skill.jpg')
 

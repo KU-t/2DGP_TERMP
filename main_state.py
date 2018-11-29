@@ -62,15 +62,9 @@ def collide_y_wall(a, wall):
     return True
 
 def enter():
-    global penguin
-    penguin = Penguin()
-    game_world.add_object(penguin, 1)
 
-    with open('./data/human_data.json', 'r') as f:
-        human_data_list = json.load(f)
-    for data in human_data_list:
-        human = Human(data['x'], data['y'])
-        game_world.add_object(human, 1)
+
+
 
     global background
     background = Background()
@@ -83,6 +77,16 @@ def enter():
     for data in item_data_list:
         item = Item(data['x'], data['y'], data['type'])
         game_world.add_object(item, 1)
+
+    global penguin
+    penguin = Penguin()
+    game_world.add_object(penguin, 1)
+
+    with open('./data/human_data.json', 'r') as f:
+        human_data_list = json.load(f)
+    for data in human_data_list:
+        human = Human(data['x'], data['y'])
+        game_world.add_object(human, 1)
 
 
 
@@ -138,7 +142,9 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.quit()
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_c:
+            game_framework.change_state(victory_state)
         else:
             penguin.handle_event(event)
 
@@ -159,7 +165,7 @@ def update():
                 if penguin.time_life == 0:
                     penguin.time_life = 300
                     penguin.life_count -= 1
-                    if penguin.life_count == 0:
+                    if penguin.life_count < 0:
                         game_framework.change_state(end_state)
 
     if penguin.card_count >= 3:

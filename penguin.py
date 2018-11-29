@@ -3,7 +3,7 @@ from pico2d import *
 
 import game_world
 import main_state
-
+from item import Item
 
 # Penguin Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
@@ -140,8 +140,7 @@ class WalkingState:
             if penguin.time_life // 100 == 0:
                 penguin.image_count_1.draw(penguin.x - main_state.penguin.x + penguin.cx, penguin.y - main_state.penguin.y + penguin.cy + 30)
 
-        draw_rectangle(*penguin.get_bb())
-        #draw_rectangle(*penguin.get_collision_bb())
+
 
 next_state_table = {
     WalkingState: {RIGHTKEY_UP: WalkingState, LEFTKEY_UP: WalkingState, RIGHTKEY_DOWN: WalkingState, LEFTKEY_DOWN: WalkingState,
@@ -159,9 +158,10 @@ class Penguin:
     def __init__(self, x = 400, y = 300):
         if Penguin.image_count_1 == None:
             Penguin.image = load_image('./image/penguin.png')
-            Penguin.image_count_1 = load_image('./image/1.jpg')
-            Penguin.image_count_2 = load_image('./image/2.jpg')
-            Penguin.image_count_3 = load_image('./image/3.jpg')
+            Penguin.image_count_1 = load_image('./image/1.png')
+            Penguin.image_count_2 = load_image('./image/2.png')
+            Penguin.image_count_3 = load_image('./image/3.png')
+
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
         # Penguin is only once created, so instance image loading is fine
@@ -228,7 +228,6 @@ class Penguin:
         if self.time_life > 0:
             self.time_life -= 3
 
-
     def draw(self):
         self.cur_state.draw(self)
         self.font.draw(self.canvas_width//2 - 60 , self.canvas_height//2 + 50 , '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
@@ -236,6 +235,10 @@ class Penguin:
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 90 , 'card[%3d]' % self.card_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.skill_count, (0, 0, 0))
         self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 130 , 'time[%3d]' % self.time_life, (0, 0, 0))
+        self.font.draw(750, 580, 'x %2d' % self.life_count, (0, 0, 0))
+        Item.image_life.draw(720, 580)
+        self.font.draw(750, 550, 'x %2d' % self.card_count, (0, 0, 0))
+        Item.image_card.draw(720, 550)
 
     def draw_victory(self):
         self.image.clip_draw((self.frame // 50) * 38 + 323, 5 * 47 + 35, 38, 45, self.x, self.y)
@@ -245,7 +248,6 @@ class Penguin:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
-
 
 
 def Move_Frame_motion(penguin):
