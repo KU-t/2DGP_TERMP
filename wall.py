@@ -20,7 +20,6 @@ class Wall:
         return self.lx - main_state.penguin.x + self.cx - 5, self.by - main_state.penguin.y + self.cy - 5, self.rx - main_state.penguin.x + self.cx + 5, self.ty - main_state.penguin.y + self.cy + 5
 
     def draw(self):
-        #draw_rectangle(*self.get_bb())
         if self.door:
             if not self.open:
                 self.image.draw((self.rx + self.lx)/2 - main_state.penguin.x + self.cx, (self.ty + self.by)/2 - main_state.penguin.y + self.cy)

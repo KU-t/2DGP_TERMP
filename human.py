@@ -15,24 +15,36 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # zombie Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 10
+FRAMES_PER_ACTION = 4
 
 
-animation_names = ['Attack', 'Dead', 'Idle', 'Walk']
+animation_names = ['Walk']
 
 
 class Human:
-    images = None
+    images_administer = None
+    images_student1 = None
+    images_student2 = None
+    images_student3 = None
 
     def load_images(self):
-        if Human.images == None:
-            Human.images = {}
+        if Human.images_administer == None:
+            Human.images_administer = {}
             for name in animation_names:
-                Human.images[name] = [load_image("./zombiefiles/female/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Human.images_administer[name] = [load_image("./image/human/administer/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
+            Human.images_student1 = {}
+            for name in animation_names:
+                Human.images_student1[name] = [load_image("./image/human/student1/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
+            Human.images_student2 = {}
+            for name in animation_names:
+                Human.images_student2[name] = [load_image("./image/human/student2/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
+            Human.images_student3 = {}
+            for name in animation_names:
+                Human.images_student3[name] = [load_image("./image/human/student3/" + name + " (%d)" % i + ".png") for i in range(1, 5)]
 
-
-    def __init__(self, x, y):
+    def __init__(self, x, y, type):
         self.x, self.y = x, y
+        self.type = type
         self.load_images()
         self.dir = random.random()*2*math.pi # random moving direction
         self.speed = 0
@@ -107,12 +119,9 @@ class Human:
         for wall in main_state.walls:
             if main_state.collide_y_wall(self, wall):
                 collision_y = True
-                # penguin.x -= penguin.x_velocity * game_framework.frame_time
         if not collision_y:
             self.y += self.y_velocity * math.sin(self.dir) * game_framework.frame_time
 
-        #self.x += self.x_velocity * math.cos(self.dir) * game_framework.frame_time
-        #self.y += self.y_velocity * math.sin(self.dir) * game_framework.frame_time
         self.x = clamp(0, self.x, main_state.penguin.bg.w)
         self.y = clamp(0, self.y, main_state.penguin.bg.h)
 
@@ -120,23 +129,24 @@ class Human:
 
     def draw(self):
 
-        #self.image.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
-
         if math.cos(self.dir) < 0:
-            if self.speed == 0:
-                pass
-                Human.images['Idle'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
-            else:
-                Human.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            if self.type == 'administer':
+                Human.images_administer['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student1':
+                Human.images_student1['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student2':
+                Human.images_student2['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student3':
+                Human.images_student3['Walk'][int(self.frame)].composite_draw(0, 'h', self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
         else:
-            if self.speed == 0:
-                pass
-                Human.images['Idle'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
-            else:
-                Human.images['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x  + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
-        draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_collision_x_bb())
-        draw_rectangle(*self.get_collision_y_bb())
+            if self.type == 'administer':
+                Human.images_administer['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student1':
+                Human.images_student1['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student2':
+                Human.images_student2['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
+            elif self.type == 'student3':
+                Human.images_student3['Walk'][int(self.frame)].draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 50, 50)
 
     def handle_event(self, event):
         pass

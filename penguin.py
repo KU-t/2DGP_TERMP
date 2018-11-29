@@ -18,7 +18,6 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-
 # Penguin Event
 RIGHTKEY_DOWN, LEFTKEY_DOWN, UPKEY_DOWN, DOWNKEY_DOWN, RIGHTKEY_UP, LEFTKEY_UP, UPKEY_UP, DOWNKEY_UP, UPKEY_M, DOWNKEY_M = range(10)
 
@@ -34,7 +33,6 @@ key_event_table = {
     (SDL_KEYUP, SDLK_m): UPKEY_M,
     (SDL_KEYDOWN, SDLK_m): DOWNKEY_M
 }
-
 
 # Penguin States
 
@@ -83,8 +81,6 @@ class WalkingState:
     @staticmethod
     def exit(penguin, event):
         pass
-        #if event == SPACE:
-        #    penguin.fire_ball()
 
     @staticmethod
     def do(penguin):
@@ -97,7 +93,6 @@ class WalkingState:
                 collision_x = True
         if not collision_x:
             penguin.x += penguin.x_velocity * game_framework.frame_time
-
 
         #y축 충돌체크
         collision_y = False
@@ -141,7 +136,6 @@ class WalkingState:
                 penguin.image_count_1.draw(penguin.x - main_state.penguin.x + penguin.cx, penguin.y - main_state.penguin.y + penguin.cy + 30)
 
 
-
 next_state_table = {
     WalkingState: {RIGHTKEY_UP: WalkingState, LEFTKEY_UP: WalkingState, RIGHTKEY_DOWN: WalkingState, LEFTKEY_DOWN: WalkingState,
                 UPKEY_UP: WalkingState, UPKEY_DOWN: WalkingState, DOWNKEY_UP: WalkingState, DOWNKEY_DOWN: WalkingState,
@@ -154,6 +148,7 @@ class Penguin:
     image_count_1 = None
     image_count_2 = None
     image_count_3 = None
+    image_wind = None
 
     def __init__(self, x = 400, y = 300):
         if Penguin.image_count_1 == None:
@@ -161,6 +156,7 @@ class Penguin:
             Penguin.image_count_1 = load_image('./image/1.png')
             Penguin.image_count_2 = load_image('./image/2.png')
             Penguin.image_count_3 = load_image('./image/3.png')
+            Penguin.image_wind = load_image('./image/wind.png')
 
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()
@@ -230,19 +226,18 @@ class Penguin:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.canvas_width//2 - 60 , self.canvas_height//2 + 50 , '(%4d, %4d)' % (self.x, self.y), (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 70 , 'life[%3d]' % self.life_count, (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 90 , 'card[%3d]' % self.card_count, (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 110 , 'shoe[%3d]' % self.skill_count, (0, 0, 0))
-        self.font.draw(self.canvas_width//2 - 20 , self.canvas_height//2 + 130 , 'time[%3d]' % self.time_life, (0, 0, 0))
         self.font.draw(750, 580, 'x %2d' % self.life_count, (0, 0, 0))
         Item.image_life.draw(720, 580)
         self.font.draw(750, 550, 'x %2d' % self.card_count, (0, 0, 0))
         Item.image_card.draw(720, 550)
 
-    def draw_victory(self):
-        self.image.clip_draw((self.frame // 50) * 38 + 323, 5 * 47 + 35, 38, 45, self.x, self.y)
-        self.font.draw(self.x - 40, self.y + 30, 'Thanks!', (100, 100, 255))
+    def draw_victory(self, speed_frame, i):
+        self.image.clip_draw((self.frame // 50) * 38 + 323, speed_frame * 47 + 35, 38, 45, self.x, self.y)
+
+        if i:
+            self.font.draw(self.x - 40, self.y + 30, 'Thanks!', (100, 100, 255))
+        else:
+            self.font.draw(self.x - 20, self.y + 30, 'Help!', (100, 100, 255))
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:

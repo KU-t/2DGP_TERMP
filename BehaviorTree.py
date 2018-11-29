@@ -60,6 +60,7 @@ class SelectorNode(Node):
             child.print()
         unindent()
 
+
 class SequenceNode(Node):
     def __init__(self, name):
         self.children = []

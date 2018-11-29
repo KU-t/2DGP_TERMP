@@ -10,12 +10,14 @@ from penguin import Penguin
 
 penguins = []
 
+
 def enter():
     global image
     image = load_image('./image/victory.png')
 
     global penguins
-    penguins += [Penguin(random.randint(0, 800), random.randint(230, 270)) for i in range(0, 5)]
+    penguins += [Penguin(i * 180, random.randint(230, 270)) for i in range(0, 5)]
+
 
 def exit():
     global image
@@ -42,21 +44,15 @@ def draw():
         if penguin.x <= - 20:
             penguin.x = 820
             penguin.y = random.randint(230, 270)
-        penguin.draw_victory()
+        penguin.draw_victory(5, True)
     update_canvas()
-
-
-
-
-
 
 
 def update():
     pass
-    global penguins
+
 
     #for penguin in penguins:
-
 
 
 def pause():

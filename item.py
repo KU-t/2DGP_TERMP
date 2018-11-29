@@ -10,8 +10,8 @@ class Item:
     def __init__(self, x, y, type = 'life'):
         if Item.image_life == None:
             Item.image_life = load_image('./image/life.png')
-            Item.image_card = load_image('./image/card.jpg')
-            Item.image_skill = load_image('./image/skill.jpg')
+            Item.image_card = load_image('./image/card.png')
+            Item.image_skill = load_image('./image/skill.png')
 
         self.type = type
         self.x, self.y = x, y
@@ -29,7 +29,7 @@ class Item:
             if self.type == 'card':
                 self.image_card.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
             if self.type == 'skill':
-                self.image_skill.draw(self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy)
+                self.image_skill.clip_draw(0, 0, 600, 600, self.x - main_state.penguin.x + self.cx, self.y - main_state.penguin.y + self.cy, 32, 32)
 
     def draw_move(self):
         pass

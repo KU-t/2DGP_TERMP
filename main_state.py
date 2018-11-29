@@ -28,8 +28,8 @@ map = None
 def get_penguin():
     return penguin
 
+
 def collide(a, b):
-    # fill here
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
 
@@ -39,8 +39,8 @@ def collide(a, b):
     if bottom_a > top_b : return False
     return True
 
+
 def collide_x_wall(a, wall):
-    # fill here
     left_a, bottom_a, right_a, top_a = a.get_collision_x_bb()
     left_b, bottom_b, right_b, top_b = wall.get_bb()
 
@@ -50,8 +50,8 @@ def collide_x_wall(a, wall):
     if bottom_a > top_b : return False
     return True
 
+
 def collide_y_wall(a, wall):
-    # fill here
     left_a, bottom_a, right_a, top_a = a.get_collision_y_bb()
     left_b, bottom_b, right_b, top_b = wall.get_bb()
 
@@ -62,9 +62,6 @@ def collide_y_wall(a, wall):
     return True
 
 def enter():
-
-
-
 
     global background
     background = Background()
@@ -85,10 +82,8 @@ def enter():
     with open('./data/human_data.json', 'r') as f:
         human_data_list = json.load(f)
     for data in human_data_list:
-        human = Human(data['x'], data['y'])
+        human = Human(data['x'], data['y'], data['type'])
         game_world.add_object(human, 1)
-
-
 
     global walls
     # 세로 벽
@@ -126,7 +121,8 @@ def enter():
 
 
 def exit():
-    game_world.clear()
+    for game_object in game_world.all_objects():
+        game_object.update()
 
 def pause():
     pass
@@ -143,8 +139,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_c:
-            game_framework.change_state(victory_state)
         else:
             penguin.handle_event(event)
 
@@ -173,6 +167,7 @@ def update():
             if isinstance(game_object, Wall):
                 if game_object.door:
                     game_object.open = True
+
     if penguin.x <= 800:
         if 450 <= penguin.y and penguin.y <= 750:
             game_framework.change_state(victory_state)
