@@ -10,6 +10,7 @@ image = None
 from penguin import Penguin
 
 penguins = []
+bgm = None
 
 def enter():
     global image
@@ -17,6 +18,10 @@ def enter():
 
     global penguins
     penguins = [Penguin(400, -20)]
+
+    global bgm
+    bgm = load_music('./sound/title_state.mp3')
+    bgm.set_volume(128)
 
 
 def exit():
@@ -49,7 +54,8 @@ def update():
         penguin.frame = (penguin.frame + 1) % 150
         if penguin.y <= 150:
             penguin.y = penguin.y + 0.1
-
+        if 0 < penguin.y and penguin.y < 0.2:
+            bgm.play(1)
 
 
 def pause():

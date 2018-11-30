@@ -176,9 +176,11 @@ class Penguin:
         self.card_count = 0
         self.skill_count = 0
         self.cx, self.cy = 0, 0
-        self.eat_sound = load_wav('pickup.wav')
+        self.eat_sound = load_music('./sound/pickup.mp3')
         self.eat_sound.set_volume(32)
         self.time_life = 0
+        self.hit_penguin = load_music('./sound/hit_penguin.mp3')
+        self.hit_penguin.set_volume(32)
 
     def get_bb(self):
         return self.cx - 10, self.cy - 20, self.cx + 10, self.cy + 10

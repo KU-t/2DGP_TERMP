@@ -23,7 +23,7 @@ background = None
 items = []
 walls = []
 map = None
-
+bgm = None
 
 def get_penguin():
     return penguin
@@ -119,6 +119,10 @@ def enter():
     background.set_center_object(penguin)
     penguin.set_background(background)
 
+    global bgm
+    bgm = load_wav('./sound/main_state.wav')
+    bgm.set_volume(64)
+    bgm.repeat_play()
 
 def exit():
     for game_object in game_world.all_objects():
@@ -152,6 +156,7 @@ def update():
             if game_object.exist:
                 if collide(penguin, game_object):
                     penguin.eat(game_object)
+                    #bgm.play()
 
     for game_object in game_world.all_objects():
         if isinstance(game_object, Human):
@@ -159,6 +164,7 @@ def update():
                 if penguin.time_life == 0:
                     penguin.time_life = 300
                     penguin.life_count -= 1
+                    penguin.hit_penguin.play(1)
                     if penguin.life_count < 0:
                         game_framework.change_state(end_state)
 

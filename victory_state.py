@@ -9,7 +9,7 @@ image = None
 from penguin import Penguin
 
 penguins = []
-
+bgm = None
 
 def enter():
     global image
@@ -18,6 +18,10 @@ def enter():
     global penguins
     penguins += [Penguin(i * 180, random.randint(230, 270)) for i in range(0, 5)]
 
+    global bgm
+    bgm = load_music('./sound/victory_state.mp3')
+    bgm.set_volume(64)
+    bgm.repeat_play()
 
 def exit():
     global image
