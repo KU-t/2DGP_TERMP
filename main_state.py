@@ -124,9 +124,10 @@ def enter():
     bgm.set_volume(64)
     bgm.repeat_play()
 
+
 def exit():
-    for game_object in game_world.all_objects():
-        game_object.update()
+    game_world.clear()
+
 
 def pause():
     pass

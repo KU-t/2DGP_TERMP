@@ -1,5 +1,7 @@
 import game_framework
 from pico2d import *
+import game_world
+
 import main_state
 import random
 
@@ -24,8 +26,7 @@ def enter():
     bgm.repeat_play()
 
 def exit():
-    global image
-    del(image)
+    game_world.clear()
 
 
 def handle_events():

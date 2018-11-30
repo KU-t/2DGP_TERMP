@@ -1,6 +1,8 @@
 import game_framework
 from pico2d import *
 import main_state
+import game_world
+
 import random
 import end_state
 import victory_state
@@ -25,8 +27,7 @@ def enter():
 
 
 def exit():
-    global image
-    del(image)
+    game_world.clear()
 
 
 def handle_events():

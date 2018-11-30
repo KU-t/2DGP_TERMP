@@ -1,6 +1,7 @@
 import game_framework
 from pico2d import *
 import title_state
+import game_world
 
 name = "StartState"
 image = None
@@ -13,8 +14,7 @@ def enter():
 
 
 def exit():
-    global image
-    del(image)
+    game_world.clear()
 
 
 def update():

@@ -2,6 +2,7 @@ import game_framework
 from pico2d import *
 import title_state
 import random
+import game_world
 
 name = "EndState"
 image = None
@@ -25,8 +26,7 @@ def enter():
     bgm.repeat_play()
 
 def exit():
-    global image
-    del(image)
+    game_world.clear()
 
 
 def handle_events():
@@ -38,7 +38,7 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                game_framework.quit()
+                game_framework.change_state(title_state)
 
 def draw():
     clear_canvas()
