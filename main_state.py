@@ -127,7 +127,7 @@ def enter():
 
 def exit():
     game_world.clear()
-
+    bgm.set_volume(0)
 
 def pause():
     pass

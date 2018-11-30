@@ -27,7 +27,7 @@ def enter():
 
 def exit():
     game_world.clear()
-
+    bgm.stop()
 
 def handle_events():
     events = get_events()

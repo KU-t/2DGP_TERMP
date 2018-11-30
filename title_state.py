@@ -28,7 +28,7 @@ def enter():
 
 def exit():
     game_world.clear()
-
+    bgm.stop()
 
 def handle_events():
     events = get_events()
@@ -55,7 +55,7 @@ def update():
         penguin.frame = (penguin.frame + 1) % 150
         if penguin.y <= 150:
             penguin.y = penguin.y + 0.1
-        if 0 < penguin.y and penguin.y < 0.2:
+        if 0 < penguin.y and penguin.y < 0.1:
             bgm.play(1)
 
 
