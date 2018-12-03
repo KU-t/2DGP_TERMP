@@ -2,7 +2,7 @@ import game_framework
 from pico2d import *
 import game_world
 
-import main_state
+import title_state
 import random
 
 name = "Victory"
@@ -25,9 +25,13 @@ def enter():
     bgm.set_volume(64)
     bgm.repeat_play()
 
+
 def exit():
+    global penguins
+    penguins = []
     game_world.clear()
     bgm.stop()
+
 
 def handle_events():
     events = get_events()
@@ -38,7 +42,8 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                game_framework.quit()
+                game_framework.change_state(title_state)
+
 
 def draw():
     clear_canvas()
@@ -55,9 +60,6 @@ def draw():
 
 def update():
     pass
-
-
-    #for penguin in penguins:
 
 
 def pause():

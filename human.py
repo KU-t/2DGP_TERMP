@@ -85,7 +85,6 @@ class Human:
         wander_chase_node.add_children(chase_node, wander_node)
         self.bt = BehaviorTree(wander_chase_node)
 
-
     def get_bb(self):
         return self.x - main_state.penguin.x + self.cx - 5, self.y - main_state.penguin.y + self.cy - 5, self.x - main_state.penguin.x + self.cx + 5, self.y - main_state.penguin.y + self.cy + 5
 
@@ -124,8 +123,6 @@ class Human:
 
         self.x = clamp(0, self.x, main_state.penguin.bg.w)
         self.y = clamp(0, self.y, main_state.penguin.bg.h)
-
-
 
     def draw(self):
 

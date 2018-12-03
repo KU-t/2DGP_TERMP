@@ -86,19 +86,19 @@ def enter():
         game_world.add_object(human, 1)
 
     global walls
-    # 세로 벽
+    # column
     walls = [Wall((i + 1) * 200, 0, (i + 1) * 200, 150) for i in range(7)]
     walls += [Wall((i + 1) * 200, 300, (i + 1) * 200, 450) for i in range(5)]
     walls += [Wall((i + 1) * 200, 750, (i + 1) * 200, 900) for i in range(5)]
     walls += [Wall((i + 1) * 200, 1050, (i + 1) * 200, 1200) for i in range(7)]
     walls += [Wall(0, 0, 0, 1200), Wall(1600, 0, 1600, 1200)]
 
-    # 가로 벽
+    # row
     walls += [Wall(0, i * 150, 1600, i * 150) for i in range(9) if i == 0 or i == 8]
     walls += [Wall(0, i * 150, 1200, i * 150) for i in range(9) if i == 3 or i == 5]
     walls += [Wall(1400, i * 150, 1600, i * 150) for i in range(9) if i == 3 or i == 5]
 
-    # 입구 벽
+    # inter wall
     walls += [Wall(-100 + 400 * i, 150, 100 + 400 * i, 150) for i in range(5)]
     walls += [Wall(-100 + 400 * i, 300, 100 + 400 * i, 300) for i in range(5) if not i == 3]
     walls += [Wall(-100 + 400 * 3, 300, 100 + 400 * 3 - 100, 300)]
@@ -106,7 +106,7 @@ def enter():
     walls += [Wall(-100 + 400 * 3, 900, 100 + 400 * 3 - 100, 900)]
     walls += [Wall(-100 + 400 * i, 1050, 100 + 400 * i, 1050) for i in range(5)]
 
-    # 입구 & 휴게실 & 중앙문
+    # inter & main Door
     walls += [Wall(1200, 300, 1200, 500), Wall(1200, 700, 1200, 900)]
     walls += [Wall(1400, 300, 1400, 500), Wall(1400, 600, 1400, 900)]
     walls += [Wall(1200, 500, 1200, 700, True)]
@@ -128,6 +128,7 @@ def enter():
 def exit():
     game_world.clear()
     bgm.set_volume(0)
+
 
 def pause():
     pass
@@ -157,7 +158,6 @@ def update():
             if game_object.exist:
                 if collide(penguin, game_object):
                     penguin.eat(game_object)
-                    #bgm.play()
 
     for game_object in game_world.all_objects():
         if isinstance(game_object, Human):
@@ -178,6 +178,7 @@ def update():
     if penguin.x <= 800:
         if 450 <= penguin.y and penguin.y <= 750:
             game_framework.change_state(victory_state)
+
 
 def draw():
     clear_canvas()

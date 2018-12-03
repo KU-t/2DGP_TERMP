@@ -14,6 +14,7 @@ from penguin import Penguin
 penguins = []
 bgm = None
 
+
 def enter():
     global image
     image = load_image('./image/title.png')
@@ -27,8 +28,11 @@ def enter():
 
 
 def exit():
+    global penguins
+    penguins = []
     game_world.clear()
     bgm.stop()
+
 
 def handle_events():
     events = get_events()

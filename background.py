@@ -12,13 +12,11 @@ class FixedBackground:
         self.w = self.image.w
         self.h = self.image.h
 
-
     def set_center_object(self, boy):
         self.center_object = boy
 
     def draw(self):
         self.image.clip_draw_to_origin(self.window_left, self.window_bottom, self.canvas_width, self.canvas_height, 0, 0)
-
 
 
     def update(self):

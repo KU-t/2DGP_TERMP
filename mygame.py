@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import game_framework
 import pico2d
 

@@ -67,7 +67,6 @@ def pop_state():
         stack[-1].resume()
 
 
-
 def quit():
     global running
     running = False
@@ -93,7 +92,6 @@ def run(start_state):
         frame_time = time.time() - current_time
         current_time += frame_time
 
-
     while (len(stack) > 0):
         stack[-1].exit()
         stack.pop()
@@ -102,7 +100,6 @@ def run(start_state):
 def test_game_framework():
     start_state = TestGameState('StartState')
     run(start_state)
-
 
 
 if __name__ == '__main__':

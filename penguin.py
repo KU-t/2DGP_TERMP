@@ -86,7 +86,7 @@ class WalkingState:
     def do(penguin):
         penguin.frame = (penguin.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-        #x축 충돌체크
+        #x
         collision_x = False
         for wall in main_state.walls:
             if main_state.collide_x_wall(penguin, wall):
@@ -94,7 +94,7 @@ class WalkingState:
         if not collision_x:
             penguin.x += penguin.x_velocity * game_framework.frame_time
 
-        #y축 충돌체크
+        #y
         collision_y = False
         for wall in main_state.walls:
             if main_state.collide_y_wall(penguin, wall):

@@ -13,6 +13,7 @@ from penguin import Penguin
 penguins = []
 bgm = None
 
+
 def enter():
     global image
     image = load_image('./image/end.png')
@@ -25,9 +26,13 @@ def enter():
     bgm.set_volume(64)
     bgm.repeat_play()
 
+
 def exit():
+    global penguins
+    penguins = []
     game_world.clear()
     bgm.stop()
+
 
 def handle_events():
     events = get_events()
@@ -39,6 +44,7 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(title_state)
+
 
 def draw():
     clear_canvas()

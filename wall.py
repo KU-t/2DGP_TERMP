@@ -2,6 +2,7 @@ from pico2d import *
 import game_world
 import main_state
 
+
 class Wall:
     image = None
 
